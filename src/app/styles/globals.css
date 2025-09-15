@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+
+:root {
+  --background: #ffffff;
+  --foreground: #777;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-source-sans: var(--font-source-sans);
+  --font-noto-sans: var(--font-noto-sans);
+  --font-lobster: var(--font-lobster);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+@layer utilities {
+  @supports (-webkit-touch-callout: none) {
+    .min-h-fill-available {
+      min-height: -webkit-fill-available;
+    }
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', '游ゴシック Medium', meiryo, sans-serif;
+  line-height: 1;
+}

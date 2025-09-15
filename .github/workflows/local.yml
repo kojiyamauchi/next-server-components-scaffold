@@ -1,0 +1,58 @@
+name: CI Local Test
+
+# Disabled on GitHub Actions.
+on: workflow_call
+
+env:
+  NODE_VERSION: 22.*
+  YARN_VERSION: 4.6.0
+
+jobs:
+  setup:
+    name: Setup Module
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Execution Environment for Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Cache Node Modules
+        id: node_modules_cache_id
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-v${{ env.NODE_VERSION }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
+          restore-keys: |
+            ${{ runner.os }}-node-v${{ env.NODE_VERSION }}-deps-
+      - name: Set Yarn Version
+        run: |
+          corepack enable
+          yarn set version ${{ env.YARN_VERSION }}
+      - name: Install Dependencies
+        run: yarn
+
+  build:
+    name: Build Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Execution Environment for Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Set Yarn Version
+        run: |
+          corepack enable
+          yarn set version ${{ env.YARN_VERSION }}
+      - name: Restore Modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-v${{ env.NODE_VERSION }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
+      - name: Prisma Generate
+        run: yarn prisma:generate
+      - name: Do Build Test
+        run: yarn build

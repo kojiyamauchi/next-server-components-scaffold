@@ -1,0 +1,40 @@
+version: 0.2
+language: en
+words:
+  - autodocs
+  - autoincrement
+  - customise
+  - esbenp
+  - foobarbaz
+  - Kaku
+  - logomark
+  - nofilter
+  - pathpida
+  - reviewdog
+  - supabase
+  - tbd
+  - TBD
+  - Timestamptz
+  - turbopack
+  - Turbopack
+  - vercel
+  - wght
+flagWords:
+  - null
+ignorePaths:
+  - ./**/node_modules/**
+  - ./.next
+  - ./**/*/*.webp
+  - ./**/*/*.svg
+  - .git/**
+  - .husky/**
+  - .history/**
+  - ./public/**
+  - yarn.lock
+  - cspell.yml
+  - tsconfig.tsbuildinfo
+  - ./storybook-static
+  - ./supabase
+  - ./prisma
+  - .env
+  - .env.repository.secrets
