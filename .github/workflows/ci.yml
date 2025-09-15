@@ -228,6 +228,11 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-node-v${{ env.NODE_VERSION }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
+      - name: Prisma Migrations
+        if: env.LAUNCH_BUILD == 'on'
+        run: yarn prisma:migrate:deploy
+        env:
+          DATABASE_URL: 'postgres://test:test@localhost:5432/test'
       - name: Prisma Generate
         if: env.LAUNCH_BUILD == 'on'
         run: yarn prisma:generate
