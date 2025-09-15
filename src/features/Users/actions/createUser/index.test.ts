@@ -8,6 +8,7 @@ jest.mock('../../repositories')
 jest.mock('@/libs', () => ({
   pagesPath: {
     users: {
+      $url: jest.fn().mockReturnValue({ path: '/users' }),
       _id: (id: number): { $url: () => { path: string } } => ({
         $url: (): { path: string } => ({
           path: `/users/${id}`,
@@ -15,6 +16,11 @@ jest.mock('@/libs', () => ({
       }),
     },
   },
+}))
+
+// Mock Next.js modules
+jest.mock('next/cache', () => ({
+  revalidatePath: jest.fn(),
 }))
 
 const mockCreateUserRepo = createUserRepo as jest.MockedFunction<typeof createUserRepo>

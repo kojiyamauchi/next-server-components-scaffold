@@ -7,16 +7,6 @@ jest.mock('@/libs', () => ({
       findMany: jest.fn(),
     },
   },
-  pagesPath: {
-    users: {
-      $url: jest.fn().mockReturnValue({ path: '/users' }),
-    },
-  },
-}))
-
-// Mock Next.js modules
-jest.mock('next/cache', () => ({
-  revalidatePath: jest.fn(),
 }))
 
 import { fetchUsersRepo } from '../../repositories'
