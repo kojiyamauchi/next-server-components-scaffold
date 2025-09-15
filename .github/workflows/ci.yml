@@ -12,7 +12,6 @@ env:
   NEXT_PUBLIC_SUPABASE_URL: 'dummy'
   LAUNCH_CSPELL: on # Launch CSpell. [ on, off ]
   LAUNCH_ESLINT: on # Launch ESLint. [ on, off ]
-  LAUNCH_STYLELINT: on # Launch Stylelint. [ on, off ]
   LAUNCH_TYPECHECK: on # Launch tsc. [ on, off ]
   LAUNCH_JEST: on # Launch Jest. [ on, off ]
   LAUNCH_BUILD: on # Launch Build. [ on, off ]
@@ -168,7 +167,7 @@ jobs:
           key: ${{ runner.os }}-node-v${{ env.NODE_VERSION }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
       - name: Set Env
         run: |
-          if ls src/**/**/*.test.ts > /dev/null 2>&1 || ls src/**/**/*.test.js > /dev/null 2>&1
+          if find src -type f \( -name "*.test.ts" -o -name "*.test.js" \) | grep -q .;
           then
               echo "FILE_EXISTS=on" >> $GITHUB_ENV
           else
