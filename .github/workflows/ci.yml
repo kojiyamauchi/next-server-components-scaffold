@@ -298,6 +298,9 @@ jobs:
           DATABASE_URL: ${{ secrets.PREVIEW_DATABASE_URL }}
           DIRECT_URL: ${{ secrets.PREVIEW_DIRECT_URL }}
 
+      - name: test
+        run: yarn build:path
+
       - name: Build Project Artifacts
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
         env:
