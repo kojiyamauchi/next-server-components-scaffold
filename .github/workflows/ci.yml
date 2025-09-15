@@ -6,10 +6,6 @@ on:
 env:
   NODE_VERSION: 22.*
   YARN_VERSION: 4.6.0
-  DATABASE_URL: 'postgresql://example.com'
-  DIRECT_URL: 'postgresql:/example.com'
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: 'dummy'
-  NEXT_PUBLIC_SUPABASE_URL: 'https://eaxmple.com'
   LAUNCH_CSPELL: on # Launch CSpell. [ on, off ]
   LAUNCH_ESLINT: on # Launch ESLint. [ on, off ]
   LAUNCH_TYPECHECK: on # Launch tsc. [ on, off ]
@@ -197,6 +193,25 @@ jobs:
       - typecheck
       - jest
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: 'postgres://test:test@localhost:5432/test'
+      DIRECT_URL: 'postgres://test:test@localhost:5432/test'
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: 'dummy-anon-key'
+      NEXT_PUBLIC_SUPABASE_URL: 'http://localhost:54321'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
