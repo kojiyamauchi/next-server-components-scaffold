@@ -6,6 +6,10 @@ on:
 env:
   NODE_VERSION: 22.*
   YARN_VERSION: 4.6.0
+  DATABASE_URL: 'dummy'
+  DIRECT_URL: 'dummy'
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: 'dummy'
+  NEXT_PUBLIC_SUPABASE_URL: 'dummy'
   LAUNCH_CSPELL: on # Launch CSpell. [ on, off ]
   LAUNCH_ESLINT: on # Launch ESLint. [ on, off ]
   LAUNCH_STYLELINT: on # Launch Stylelint. [ on, off ]
@@ -164,7 +168,7 @@ jobs:
           key: ${{ runner.os }}-node-v${{ env.NODE_VERSION }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
       - name: Set Env
         run: |
-          if ls src/**/*.test.ts > /dev/null 2>&1 || ls src/**/*.test.js > /dev/null 2>&1
+          if ls src/**/**/*.test.ts > /dev/null 2>&1 || ls src/**/**/*.test.js > /dev/null 2>&1
           then
               echo "FILE_EXISTS=on" >> $GITHUB_ENV
           else
