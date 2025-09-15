@@ -1,5 +1,7 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
+
 import { pagesPath } from '@/libs'
 
 import { deleteUserRepo } from '../../repositories'
@@ -13,6 +15,7 @@ export const deleteUser = async (id: number | undefined): Promise<{ isSuccess: b
   try {
     const result = await deleteUserRepo(id)
     console.info('delete user:', result)
+    revalidatePath(pagesPath.users.$url().path)
     return { isSuccess: true, path: pagesPath.users.$url().path }
   } catch (error) {
     console.error(`Maybe Repository Layer Error: ${error}`)
