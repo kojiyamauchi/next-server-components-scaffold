@@ -6,10 +6,10 @@ on:
 env:
   NODE_VERSION: 22.*
   YARN_VERSION: 4.6.0
-  DATABASE_URL: 'dummy'
-  DIRECT_URL: 'dummy'
+  DATABASE_URL: 'https://eaxmple.com'
+  DIRECT_URL: 'https://eaxmple.com'
   NEXT_PUBLIC_SUPABASE_ANON_KEY: 'dummy'
-  NEXT_PUBLIC_SUPABASE_URL: 'dummy'
+  NEXT_PUBLIC_SUPABASE_URL: 'https://eaxmple.com'
   LAUNCH_CSPELL: on # Launch CSpell. [ on, off ]
   LAUNCH_ESLINT: on # Launch ESLint. [ on, off ]
   LAUNCH_TYPECHECK: on # Launch tsc. [ on, off ]
