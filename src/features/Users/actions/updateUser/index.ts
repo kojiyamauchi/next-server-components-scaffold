@@ -51,7 +51,6 @@ export const updateUser = async (prevState: UserStateType, formData: FormData): 
     url: validateResult.data.url,
     phone: `${validateResult.data.phone1}-${validateResult.data.phone2}-${validateResult.data.phone3}`,
     email: validateResult.data.email,
-    create_at: dayjs().toDate(),
     update_at: dayjs().toDate(),
   }
 

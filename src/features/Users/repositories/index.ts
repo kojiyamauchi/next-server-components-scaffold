@@ -28,7 +28,7 @@ export const fetchUserRepo = async (id: number): Promise<User | null> => {
   return result
 }
 
-export const updateUserRepo = async (user: User): Promise<User> => {
+export const updateUserRepo = async (user: Omit<User, 'create_at'>): Promise<User> => {
   const result = await prisma.user.update({
     where: {
       id: user.id,
