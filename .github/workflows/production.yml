@@ -1,7 +1,9 @@
-name: Pull Request CI
+name: Production CI
+
 on:
-  pull_request:
-    branches: main
+  push:
+    branches:
+      - main
 
 env:
   NODE_VERSION: 22.*
@@ -12,11 +14,6 @@ env:
   LAUNCH_JEST: on # Launch Jest. [ on, off ]
   LAUNCH_BUILD: on # Launch Build. [ on, off ]
   LAUNCH_DEPLOY: on # Launch Deploy. [ on, off ]
-
-permissions:
-  contents: read
-  deployments: write
-  pull-requests: write
 
 jobs:
   setup:
@@ -238,8 +235,8 @@ jobs:
         if: env.LAUNCH_BUILD == 'on'
         run: yarn build
 
-  deploy-preview:
-    name: Deploy Vercel Preview
+  deploy-production:
+    name: Deploy Vercel Production
     needs:
       - build
     runs-on: ubuntu-latest
@@ -274,10 +271,10 @@ jobs:
           vercel env rm DIRECT_URL preview --yes --token=${{ secrets.VERCEL_TOKEN }} || true
           vercel env rm NEXT_PUBLIC_SUPABASE_URL preview --yes --token=${{ secrets.VERCEL_TOKEN }} || true
           vercel env rm NEXT_PUBLIC_SUPABASE_ANON_KEY preview --yes --token=${{ secrets.VERCEL_TOKEN }} || true
-          echo "${{ secrets.PREVIEW_DATABASE_URL }}" | vercel env add DATABASE_URL preview --token=${{ secrets.VERCEL_TOKEN }}
-          echo "${{ secrets.PREVIEW_DIRECT_URL }}" | vercel env add DIRECT_URL preview --token=${{ secrets.VERCEL_TOKEN }}
-          echo "${{ secrets.PREVIEW_NEXT_PUBLIC_SUPABASE_URL }}" | vercel env add NEXT_PUBLIC_SUPABASE_URL preview --token=${{ secrets.VERCEL_TOKEN }}
-          echo "${{ secrets.PREVIEW_NEXT_PUBLIC_SUPABASE_ANON_KEY }}" | vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY preview --token=${{ secrets.VERCEL_TOKEN }}
+          echo "${{ secrets.PRODUCTION_DATABASE_URL }}" | vercel env add DATABASE_URL preview --token=${{ secrets.VERCEL_TOKEN }}
+          echo "${{ secrets.PRODUCTION_DIRECT_URL }}" | vercel env add DIRECT_URL preview --token=${{ secrets.VERCEL_TOKEN }}
+          echo "${{ secrets.PRODUCTION_NEXT_PUBLIC_SUPABASE_URL }}" | vercel env add NEXT_PUBLIC_SUPABASE_URL preview --token=${{ secrets.VERCEL_TOKEN }}
+          echo "${{ secrets.PRODUCTION_NEXT_PUBLIC_SUPABASE_ANON_KEY }}" | vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY preview --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -293,18 +290,18 @@ jobs:
       - name: Prisma Migrations
         run: yarn prisma:migrate:deploy
         env:
-          DATABASE_URL: ${{ secrets.PREVIEW_DATABASE_URL }}
-          DIRECT_URL: ${{ secrets.PREVIEW_DIRECT_URL }}
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.PRODUCTION_DIRECT_URL }}
 
       - name: Build Project Artifacts
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          DATABASE_URL: ${{ secrets.PREVIEW_DATABASE_URL }}
-          DIRECT_URL: ${{ secrets.PREVIEW_DIRECT_URL }}
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.PREVIEW_NEXT_PUBLIC_SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PREVIEW_NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.PRODUCTION_DIRECT_URL }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.PRODUCTION_NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PRODUCTION_NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
       - name: Deploy Project to Vercel Preview
         id: vercel_deploy
@@ -314,25 +311,7 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          DATABASE_URL: ${{ secrets.PREVIEW_DATABASE_URL }}
-          DIRECT_URL: ${{ secrets.PREVIEW_DIRECT_URL }}
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.PREVIEW_NEXT_PUBLIC_SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PREVIEW_NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-
-      - name: Comment Preview URL on PR
-        uses: actions/github-script@v7
-        env:
-          PREVIEW_URL: ${{ steps.vercel_deploy.outputs.deploy_url }}
-        with:
-          script: |
-            const prNumber = context.payload.pull_request?.number;
-            if (!prNumber) {
-              console.log("This run is not for a pull request, skipping comment.");
-            } else {
-              github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: prNumber,
-                body: `🐶 Vercel Preview Deployment for Latest Commit is Ready!\n\n[Preview URL](${process.env.PREVIEW_URL})`
-              });
-            }
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.PRODUCTION_DIRECT_URL }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.PRODUCTION_NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PRODUCTION_NEXT_PUBLIC_SUPABASE_ANON_KEY }}
