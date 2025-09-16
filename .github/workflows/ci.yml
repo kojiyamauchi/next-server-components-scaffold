@@ -340,6 +340,6 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: prNumber,
-                body: `🐶 Vercel Preview Deployment is Ready!\n\n[Preview URL](${process.env.PREVIEW_URL})`
+                body: `🐶 Vercel Preview Deployment for Latest Commit is Ready!\n\n[Preview URL](${process.env.PREVIEW_URL})`
               });
             }
