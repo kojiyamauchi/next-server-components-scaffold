@@ -1,0 +1,8 @@
+./**/*.{ts,mjs}:
+  - yarn prettier --write
+  - yarn eslint --fix --no-warn-ignored --max-warnings 0
+./**/*.js: yarn prettier --write
+./prisma/schema.prisma:
+  - yarn prisma:validate
+  - yarn prisma:format
+./**/*: cspell --dot --no-must-find-files
