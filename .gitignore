@@ -44,4 +44,3 @@ next-env.d.ts
 storybook-static
 .history
 design.md
-public/storybook/
