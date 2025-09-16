@@ -1,10 +1,15 @@
 import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
+import utc from 'dayjs/plugin/utc'
 import Link from 'next/link'
 
 import { pagesPath } from '@/libs'
 
 import { getUsers } from '../actions'
 import { List } from '../components/List'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 export const UsersContainer: React.FC = async () => {
   const users = await getUsers()
@@ -19,8 +24,8 @@ export const UsersContainer: React.FC = async () => {
             url={user.url}
             phone={user.phone}
             email={user.email}
-            createAt={dayjs(user.create_at).format('YYYY-MM-DD HH:mm:ss')}
-            updateAt={dayjs(user.update_at).format('YYYY-MM-DD HH:mm:ss')}
+            createAt={dayjs(user.create_at).tz('Asia/Tokyo').format('YYYY-MM-DD HH:mm:ss')}
+            updateAt={dayjs(user.update_at).tz('Asia/Tokyo').format('YYYY-MM-DD HH:mm:ss')}
           />
         </Link>
       ))}

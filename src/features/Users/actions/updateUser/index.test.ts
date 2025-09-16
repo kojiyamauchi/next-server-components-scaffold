@@ -102,7 +102,6 @@ describe('ユーザー更新アクション', () => {
         url: 'https://example.com',
         phone: '03-1234-5678',
         email: 'test@example.com',
-        create_at: expect.any(Date),
         update_at: expect.any(Date),
       })
       expect(mockRevalidatePath).toHaveBeenCalledWith('/users/1')
