@@ -53,6 +53,9 @@ export const UserContainer: React.FC<Props> = ({ id }: Props) => {
 
   const handleDeleteUser = useCallback(
     async (id: number | undefined) => {
+      setUser((prev) => {
+        return { ...prev, isLoading: true }
+      })
       const result = await deleteUser(id)
 
       if (result.isSuccess) {
