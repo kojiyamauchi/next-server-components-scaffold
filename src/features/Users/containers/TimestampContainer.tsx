@@ -1,7 +1,12 @@
 import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
+import utc from 'dayjs/plugin/utc'
 
 import { getUser } from '../actions'
 import { Timestamp } from '../components/Timestamp'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 type Props = {
   id: number
@@ -15,7 +20,10 @@ export const TimestampContainer: React.FC<Props> = async ({ id }) => {
 
   return (
     <>
-      <Timestamp createAt={dayjs(user.createAt).format('YYYY-MM-DD HH:mm:ss')} updateAt={dayjs(user.updateAt).format('YYYY-MM-DD HH:mm:ss')} />
+      <Timestamp
+        createAt={dayjs(user.createAt).tz('Asia/Tokyo').format('YYYY-MM-DD HH:mm:ss')}
+        updateAt={dayjs(user.updateAt).tz('Asia/Tokyo').format('YYYY-MM-DD HH:mm:ss')}
+      />
     </>
   )
 }

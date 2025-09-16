@@ -22,8 +22,8 @@ export const SuspenseWrapper = async <T,>({ fetcher, children }: Props<T>): Prom
               url={user.url}
               phone={user.phone}
               email={user.email}
-              createAt={dayjs(user.create_at).format('YYYY-MM-DD HH:mm:ss')}
-              updateAt={dayjs(user.update_at).format('YYYY-MM-DD HH:mm:ss')}
+              createAt={dayjs(user.create_at).tz('Asia/Tokyo').format('YYYY-MM-DD HH:mm:ss')}
+              updateAt={dayjs(user.update_at).tz('Asia/Tokyo').format('YYYY-MM-DD HH:mm:ss')}
             />
           </a>
         ))
