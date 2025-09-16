@@ -260,21 +260,21 @@ jobs:
         run: npm install -g vercel@latest
 
       - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Set Vercel Environment Variables
         run: |
-          vercel env rm DATABASE_URL preview --yes --token=${{ secrets.VERCEL_TOKEN }} || true
-          vercel env rm DIRECT_URL preview --yes --token=${{ secrets.VERCEL_TOKEN }} || true
-          vercel env rm NEXT_PUBLIC_SUPABASE_URL preview --yes --token=${{ secrets.VERCEL_TOKEN }} || true
-          vercel env rm NEXT_PUBLIC_SUPABASE_ANON_KEY preview --yes --token=${{ secrets.VERCEL_TOKEN }} || true
-          echo "${{ secrets.PRODUCTION_DATABASE_URL }}" | vercel env add DATABASE_URL preview --token=${{ secrets.VERCEL_TOKEN }}
-          echo "${{ secrets.PRODUCTION_DIRECT_URL }}" | vercel env add DIRECT_URL preview --token=${{ secrets.VERCEL_TOKEN }}
-          echo "${{ secrets.PRODUCTION_NEXT_PUBLIC_SUPABASE_URL }}" | vercel env add NEXT_PUBLIC_SUPABASE_URL preview --token=${{ secrets.VERCEL_TOKEN }}
-          echo "${{ secrets.PRODUCTION_NEXT_PUBLIC_SUPABASE_ANON_KEY }}" | vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY preview --token=${{ secrets.VERCEL_TOKEN }}
+          vercel env rm DATABASE_URL production --yes --token=${{ secrets.VERCEL_TOKEN }} || true
+          vercel env rm DIRECT_URL production --yes --token=${{ secrets.VERCEL_TOKEN }} || true
+          vercel env rm NEXT_PUBLIC_SUPABASE_URL production --yes --token=${{ secrets.VERCEL_TOKEN }} || true
+          vercel env rm NEXT_PUBLIC_SUPABASE_ANON_KEY production --yes --token=${{ secrets.VERCEL_TOKEN }} || true
+          echo "${{ secrets.PRODUCTION_DATABASE_URL }}" | vercel env add DATABASE_URL production --token=${{ secrets.VERCEL_TOKEN }}
+          echo "${{ secrets.PRODUCTION_DIRECT_URL }}" | vercel env add DIRECT_URL production --token=${{ secrets.VERCEL_TOKEN }}
+          echo "${{ secrets.PRODUCTION_NEXT_PUBLIC_SUPABASE_URL }}" | vercel env add NEXT_PUBLIC_SUPABASE_URL production --token=${{ secrets.VERCEL_TOKEN }}
+          echo "${{ secrets.PRODUCTION_NEXT_PUBLIC_SUPABASE_ANON_KEY }}" | vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY production --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -282,7 +282,7 @@ jobs:
       - name: Verify Vercel Environment Variables
         run: |
           echo "Listing Vercel environment variables:"
-          vercel env ls preview --token=${{ secrets.VERCEL_TOKEN }}
+          vercel env ls production --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -294,7 +294,7 @@ jobs:
           DIRECT_URL: ${{ secrets.PRODUCTION_DIRECT_URL }}
 
       - name: Build Project Artifacts
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -306,7 +306,7 @@ jobs:
       - name: Deploy Project to Vercel Preview
         id: vercel_deploy
         run: |
-          DEPLOY_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --confirm | grep -Eo 'https://[a-zA-Z0-9.-]+vercel.app')
+          DEPLOY_URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }} --confirm | grep -Eo 'https://[a-zA-Z0-9.-]+vercel.app')
           echo "deploy_url=$DEPLOY_URL" >> $GITHUB_OUTPUT
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
