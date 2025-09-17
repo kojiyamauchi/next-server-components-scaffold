@@ -33,7 +33,7 @@ jobs:
       - name: Install Dependencies
         run: yarn
 
-  build:
+  build-test:
     name: Build Test
     runs-on: ubuntu-latest
     services:
@@ -79,4 +79,4 @@ jobs:
       - name: Prisma Generate
         run: yarn prisma:generate
       - name: Do Build Test
-        run: yarn build
+        run: yarn build-test
