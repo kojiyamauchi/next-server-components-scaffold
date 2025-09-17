@@ -426,6 +426,6 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: prNumber,
-                body: `🐶 Deployed Storybook to Vercel Preview from the Latest Commit is Ready!\n\n[Storybook Preview URL](${process.env.STORYBOOK_PREVIEW_URL})`
+                body: `:octocat: Deployed Storybook to Vercel Preview from the Latest Commit is Ready!\n\n[Storybook Preview URL](${process.env.STORYBOOK_PREVIEW_URL})`
               });
             }
