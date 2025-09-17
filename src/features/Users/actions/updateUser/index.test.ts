@@ -14,7 +14,6 @@ jest.mock('@/libs', () => ({
   },
   pagesPath: {
     users: {
-      $url: jest.fn().mockReturnValue({ path: '/users' }),
       _id: (id: number): { $url: () => { path: string } } => ({
         $url: (): { path: string } => ({
           path: `/users/${id}`,

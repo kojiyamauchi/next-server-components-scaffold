@@ -14,11 +14,6 @@ jest.mock('@/libs', () => ({
   },
 }))
 
-// Mock Next.js modules
-jest.mock('next/cache', () => ({
-  revalidatePath: jest.fn(),
-}))
-
 const mockDeleteUserRepo = deleteUserRepo as jest.MockedFunction<typeof deleteUserRepo>
 
 describe('ユーザー削除アクション', () => {
