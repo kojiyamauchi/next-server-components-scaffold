@@ -179,7 +179,7 @@ jobs:
         if: env.LAUNCH_JEST == 'on' && env.FILE_EXISTS == 'on'
         run: yarn jest
 
-  build:
+  build-test:
     name: Build Test
     needs:
       - setup
@@ -233,12 +233,12 @@ jobs:
         run: yarn prisma:generate
       - name: Do Build Test
         if: env.LAUNCH_BUILD == 'on'
-        run: yarn build
+        run: yarn build-test
 
-  deploy-production:
-    name: Deploy Vercel Production
+  deploy-app-production:
+    name: Deploy App Vercel Production
     needs:
-      - build
+      - build-test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -311,6 +311,81 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.PRODUCTION_DIRECT_URL }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.PRODUCTION_NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PRODUCTION_NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+  deploy-storybook-production:
+    name: Deploy Storybook Vercel Production
+    needs:
+      - build-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Execution Environment for Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Set Yarn Version
+        run: |
+          corepack enable
+          yarn set version ${{ env.YARN_VERSION }}
+      - name: Restore Modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-v${{ env.NODE_VERSION }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.STORYBOOK_VERCEL_PROJECT_ID }}
+
+      - name: Set Vercel Environment Variables
+        run: |
+          vercel env rm DATABASE_URL production --yes --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }} || true
+          vercel env rm DIRECT_URL production --yes --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }} || true
+          vercel env rm NEXT_PUBLIC_SUPABASE_URL production --yes --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }} || true
+          vercel env rm NEXT_PUBLIC_SUPABASE_ANON_KEY production --yes --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }} || true
+          echo "${{ secrets.PRODUCTION_DATABASE_URL }}" | vercel env add DATABASE_URL production --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }}
+          echo "${{ secrets.PRODUCTION_DIRECT_URL }}" | vercel env add DIRECT_URL production --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }}
+          echo "${{ secrets.PRODUCTION_NEXT_PUBLIC_SUPABASE_URL }}" | vercel env add NEXT_PUBLIC_SUPABASE_URL production --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }}
+          echo "${{ secrets.PRODUCTION_NEXT_PUBLIC_SUPABASE_ANON_KEY }}" | vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY production --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.STORYBOOK_VERCEL_PROJECT_ID }}
+
+      - name: Verify Vercel Environment Variables
+        run: |
+          echo "Listing Vercel environment variables:"
+          vercel env ls production --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.STORYBOOK_VERCEL_PROJECT_ID }}
+
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.STORYBOOK_VERCEL_PROJECT_ID }}
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.PRODUCTION_DIRECT_URL }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.PRODUCTION_NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PRODUCTION_NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+      - name: Deploy Project to Vercel Preview
+        id: vercel_deploy
+        run: |
+          STORYBOOK_DEPLOY_URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }} --confirm | grep -Eo 'https://[a-zA-Z0-9.-]+vercel.app')
+          echo "storybook-deploy_url=$STORYBOOK_DEPLOY_URL" >> $GITHUB_OUTPUT
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.STORYBOOK_VERCEL_PROJECT_ID }}
           DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
           DIRECT_URL: ${{ secrets.PRODUCTION_DIRECT_URL }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.PRODUCTION_NEXT_PUBLIC_SUPABASE_URL }}

@@ -8,8 +8,11 @@ const config: StorybookConfig = {
     options: {},
   },
   staticDirs: ['../public'],
+  viteFinal: async (viteConfig) => {
+    viteConfig.resolve = viteConfig.resolve || {}
+    viteConfig.resolve.alias = { '.prisma/client/index-browser': './node_modules/.prisma/client/index-browser.js' }
+    return viteConfig
+  },
 }
-
-process.env.STORYBOOK = '1'
 
 export default config
