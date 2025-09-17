@@ -18,7 +18,7 @@
     "dev": "run-p \"dev:*\"",
     "storybook": "NEXT_PUBLIC_STORYBOOK=enable BROWSER='Google Chrome Canary' storybook dev -p 6006",
     "build:path": "pathpida -o ./src/libs",
-    "build:storybook": "storybook build",
+    "build:storybook": "NEXT_PUBLIC_STORYBOOK=enable storybook build",
     "build:app": "next build --turbopack",
     "build": "run-s build:path build:app",
     "build-test": "run-p \"build:*\"",
