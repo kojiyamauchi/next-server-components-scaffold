@@ -1,7 +1,6 @@
 'use server'
 
 import dayjs from 'dayjs'
-import { revalidatePath } from 'next/cache'
 
 import { pagesPath } from '@/libs'
 
@@ -56,7 +55,6 @@ export const createUser = async (prevState: CreateUserStateType, formData: FormD
   try {
     const result = await createUserRepo(formatUser)
     console.info('create user:', result)
-    revalidatePath(pagesPath.users.$url().path)
     return { ...validateSuccessState, createId: result.id, redirectPath: pagesPath.users._id(result.id).$url().path }
   } catch (error) {
     console.error(`Maybe Repository Layer Error: ${error}`)

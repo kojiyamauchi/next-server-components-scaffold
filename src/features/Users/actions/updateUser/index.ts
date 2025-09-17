@@ -58,7 +58,6 @@ export const updateUser = async (prevState: UserStateType, formData: FormData): 
     const result = await updateUserRepo(formatUser)
     console.info('update user:', result)
     revalidatePath(pagesPath.users._id(formatUser.id).$url().path)
-    revalidatePath(pagesPath.users.$url().path)
     return validateSuccessState
   } catch (error) {
     console.error(`Maybe Repository Layer Error: ${error}`)
