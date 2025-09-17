@@ -1,24 +1,12 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals'
 
-// Mock Next.js cache functions before importing
-jest.mock('next/cache', () => ({
-  revalidatePath: jest.fn(),
-}))
-
-// Mock @/libs entirely to avoid env dependency
+jest.mock('../../repositories')
 jest.mock('@/libs', () => ({
-  prisma: {
-    user: {
-      update: jest.fn(),
-    },
-  },
   pagesPath: {
     users: {
-      $url: jest.fn().mockReturnValue({ path: '/users' }),
+      $url: (): { path: string } => ({ path: '/users' }),
       _id: (id: number): { $url: () => { path: string } } => ({
-        $url: (): { path: string } => ({
-          path: `/users/${id}`,
-        }),
+        $url: (): { path: string } => ({ path: `/users/${id}` }),
       }),
     },
   },
@@ -34,9 +22,6 @@ import { revalidatePath } from 'next/cache'
 import { updateUserRepo } from '../../repositories'
 import { UserStateType } from '../states'
 import { updateUser } from './index'
-
-jest.mock('next/cache')
-jest.mock('../../repositories')
 
 const mockRevalidatePath = revalidatePath as jest.MockedFunction<typeof revalidatePath>
 const mockUpdateUserRepo = updateUserRepo as jest.MockedFunction<typeof updateUserRepo>
