@@ -8,6 +8,19 @@ const config: StorybookConfig = {
     options: {},
   },
   staticDirs: ['../public'],
+  viteFinal: async (viteConfig) => {
+    viteConfig.optimizeDeps = viteConfig.optimizeDeps || {}
+    viteConfig.optimizeDeps.exclude = viteConfig.optimizeDeps.exclude || []
+    viteConfig.optimizeDeps.exclude.push('@prisma/client')
+    viteConfig.build = viteConfig.build || {}
+    viteConfig.build.rollupOptions = viteConfig.build.rollupOptions || {}
+    if (!viteConfig.build.rollupOptions.external) {
+      viteConfig.build.rollupOptions.external = ['@prisma/client']
+    } else if (Array.isArray(viteConfig.build.rollupOptions.external)) {
+      viteConfig.build.rollupOptions.external.push('@prisma/client')
+    }
+    return viteConfig
+  },
 }
 
 process.env.STORYBOOK = '1'
