@@ -23,6 +23,7 @@
     "build": "run-s build:path build:app",
     "build-test": "run-p \"build:*\"",
     "start": "next start",
+    "serve:storybook": "npx serve storybook-static -l 6006",
     "lint": "eslint --fix --max-warnings 0",
     "typecheck": "tsc --noEmit",
     "jest": "jest --passWithNoTests",
