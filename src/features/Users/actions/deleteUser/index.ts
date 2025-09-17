@@ -15,7 +15,6 @@ export const deleteUser = async (id: number | undefined): Promise<{ isSuccess: b
     console.info('delete user:', result)
     return { isSuccess: true, path: pagesPath.users.$url().path }
   } catch (error) {
-    console.error(`Maybe Repository Layer Error: ${error}`)
     throw new Error('Internal Server Error', { cause: error })
   }
 }
