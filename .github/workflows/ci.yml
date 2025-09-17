@@ -367,6 +367,20 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.STORYBOOK_VERCEL_PROJECT_ID }}
 
+      - name: Set Vercel Environment Variables
+        run: |
+          vercel env rm DATABASE_URL preview --yes --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }} || true
+          vercel env rm DIRECT_URL preview --yes --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }} || true
+          vercel env rm NEXT_PUBLIC_SUPABASE_URL preview --yes --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }} || true
+          vercel env rm NEXT_PUBLIC_SUPABASE_ANON_KEY preview --yes --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }} || true
+          echo "${{ secrets.PREVIEW_DATABASE_URL }}" | vercel env add DATABASE_URL preview --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }}
+          echo "${{ secrets.PREVIEW_DIRECT_URL }}" | vercel env add DIRECT_URL preview --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }}
+          echo "${{ secrets.PREVIEW_NEXT_PUBLIC_SUPABASE_URL }}" | vercel env add NEXT_PUBLIC_SUPABASE_URL preview --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }}
+          echo "${{ secrets.PREVIEW_NEXT_PUBLIC_SUPABASE_ANON_KEY }}" | vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY preview --token=${{ secrets.STORYBOOK_VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.STORYBOOK_VERCEL_PROJECT_ID }}
+
       - name: Verify Vercel Environment Variables
         run: |
           echo "Listing Vercel environment variables:"
@@ -380,6 +394,10 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.STORYBOOK_VERCEL_PROJECT_ID }}
+          DATABASE_URL: ${{ secrets.PREVIEW_DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.PREVIEW_DIRECT_URL }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.PREVIEW_NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PREVIEW_NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
       - name: Deploy Project to Vercel Preview
         id: vercel_deploy
@@ -389,6 +407,10 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.STORYBOOK_VERCEL_PROJECT_ID }}
+          DATABASE_URL: ${{ secrets.PREVIEW_DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.PREVIEW_DIRECT_URL }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.PREVIEW_NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PREVIEW_NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
       - name: Comment Preview Storybook URL on PR
         uses: actions/github-script@v7
