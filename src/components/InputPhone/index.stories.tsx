@@ -24,8 +24,8 @@ export const Primary: Story = {}
 
 export const ValidateError: Story = {
   args: {
-    errorPhone1: 'Validate Error 1',
-    errorPhone2: 'Validate Error 2',
-    errorPhone3: 'Validate Error 3',
+    errorsPhone1: ['Validate Error1.', 'Validate Error2.', 'Validate Error3.', 'Validate Error4.', 'Validate Error5.'],
+    errorsPhone2: ['Validate Error1.', 'Validate Error2.', 'Validate Error3.', 'Validate Error4.', 'Validate Error5.'],
+    errorsPhone3: ['Validate Error1.', 'Validate Error2.', 'Validate Error3.', 'Validate Error4.', 'Validate Error5.'],
   },
 }
