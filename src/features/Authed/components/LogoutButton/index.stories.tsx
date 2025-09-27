@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { LogoutButton } from '.'
 
 const meta = {
-  title: 'features/Users/LogoutButton',
+  title: 'features/Authed/LogoutButton',
   component: LogoutButton,
   parameters: {
     layout: 'centered',
