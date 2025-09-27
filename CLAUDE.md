@@ -185,3 +185,112 @@ yarn prisma:studio
 - **Feed**: フィード情報（商品との関連）
 
 詳細は`prisma/schema.prisma`を参照してください。
+
+## Claude Code Agent設定
+
+このプロジェクトでは以下のagentが設定されています：
+
+### 利用可能なAgent
+
+#### 1. general-purpose（デフォルト）
+- **用途**: 新規開発、実装、調査、テスト作成
+- **得意分野**:
+  - 新規コンポーネント・機能の実装
+  - ユニットテスト・統合テストの作成
+  - コードベースの分析・調査
+  - バグ修正・リファクタリング
+  - 複雑な多段階タスクの実行
+
+#### 2. test-automation-specialist
+- **用途**: テスト実行、失敗分析、テスト修正
+- **得意分野**:
+  - Jestテストスイートの自動実行
+  - テスト失敗の分析と修正
+  - 既存テストのメンテナンス
+  - CI/CD失敗の対応
+  - コード変更後の品質チェック
+
+### Agent使い分けガイド
+
+#### 日常的な開発作業（general-purposeが自動使用）
+```bash
+# 新規作成・実装
+user: "新しいコンポーネントのテストを作成してください"
+user: "ユーザープロフィール機能を実装してください"
+user: "バグを修正してください"
+
+# 調査・分析
+user: "このコードの動作を調べてください"
+user: "パフォーマンス改善の方法を提案してください"
+```
+
+#### テスト自動化が必要な場合（test-automation-specialistが自動選択）
+```bash
+# テスト実行・修正
+user: "コード変更後のテストを実行してください"
+user: "CI/CDでテストが失敗しています。修正してください"
+user: "デプロイ前の品質チェックをお願いします"
+user: "テストが通らないので修正してください"
+```
+
+### Agent設定の変更
+
+```bash
+# デフォルトagentの変更
+claude set-agent general-purpose      # 開発作業用（推奨）
+claude set-agent test-automation-specialist  # テスト特化用
+
+# 現在の設定確認
+ls .claude/agents/  # 利用可能なagent一覧
+```
+
+### 運用のポイント
+
+- **手動切り替え不要**: Claudeが文脈に応じて適切なagentを自動選択
+- **効率的な開発**: 新規作成はgeneral-purpose、テスト関連はtest-automation-specialistが自動対応
+- **品質保証**: テスト実行時には専門agentが包括的な検証を実行
+
+## 文字エンコーディング設定
+
+### 文字化け対策
+
+プロジェクトでは日本語を多用するため、文字化けを防ぐための設定が重要です：
+
+#### 1. ファイル作成時の注意点
+```bash
+# ファイル作成時はUTF-8エンコーディングを必須とする
+# 特にテストファイルやドキュメントファイルで日本語を使用する場合
+```
+
+#### 2. エディタ設定
+- **VSCode**: `"files.encoding": "utf8"` を設定
+- **WebStorm**: File Encodings で UTF-8 を指定
+- **Vim**: `set encoding=utf-8` を.vimrcに追加
+
+#### 3. Git設定
+```bash
+# Git設定でUTF-8を指定
+git config --global core.quotepath false
+git config --global core.precomposeunicode true
+```
+
+#### 4. Node.js/Jest設定
+```bash
+# 環境変数でUTF-8を指定
+export LANG=ja_JP.UTF-8
+export LC_ALL=ja_JP.UTF-8
+```
+
+#### 5. 文字化け発生時の対処法
+```bash
+# ファイルを削除して再作成
+rm [文字化けファイル]
+# UTF-8エンコーディングで再作成
+```
+
+### Agent設定での対策
+
+- **general-purpose agent**: 日本語ファイル作成時にUTF-8エンコーディングを使用
+- **test-automation-specialist agent**: テスト実行時に文字化けチェックを含める
+
+**重要**: 日本語を含むファイル（特にテストファイル）は必ずUTF-8エンコーディングで作成し、作成後に表示確認を行うこと
