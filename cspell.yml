@@ -5,6 +5,7 @@ words:
   - autoincrement
   - customise
   - esbenp
+  - fkey
   - foobarbaz
   - isready
   - Kaku
@@ -12,6 +13,7 @@ words:
   - nofilter
   - octocat
   - pathpida
+  - Postgrest
   - reviewdog
   - shopt
   - supabase
@@ -22,6 +24,9 @@ words:
   - Turbopack
   - vercel
   - wght
+  - vimrc
+  - quotepath
+  - precomposeunicode
 flagWords:
   - null
 ignorePaths:
@@ -41,3 +46,4 @@ ignorePaths:
   - ./prisma
   - .env
   - .env.repository.secrets
+  - etc.md

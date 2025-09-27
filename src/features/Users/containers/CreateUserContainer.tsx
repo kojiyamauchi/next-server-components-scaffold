@@ -9,8 +9,7 @@ import { InputText } from '@/components/InputText'
 import { LoadingForm } from '@/components/LoadingForm'
 import { SquareButton } from '@/components/SquareButton'
 
-import { createUser } from '../actions'
-import { type CreateUserStateType, userInitialState } from '../actions/states'
+import { createUser, type CreateUserStateType, userInitialState } from '../actions'
 import type { CreateUserSchemaType } from '../schemas'
 
 export const CreateUserContainer: React.FC = () => {
@@ -35,45 +34,43 @@ export const CreateUserContainer: React.FC = () => {
     return isRouterBeforeLeave || isPending
   }, [isRouterBeforeLeave, isPending])
 
-  const checkError = useCallback(
+  const checkErrors = useCallback(
     (arg: keyof CreateUserSchemaType) => {
-      return state.errors?.find((error) => error[arg])
+      return state.errors?.filter((error) => error[arg]).map((error) => error[arg] ?? '')
     },
     [state.errors],
   )
 
   return (
-    <>
-      <form action={formAction} className="flex flex-col items-center justify-start gap-[30px] w-full md:max-w-[400px] px-[20px] pb-[30px]">
-        <div className="flex flex-col items-center justify-start gap-[20px] w-full min-h-[296px]">
-          {!isLoading && (
-            <>
-              <InputText name="name" label="NAME" defaultValue={user?.name} error={checkError('name')?.name} />
-              <InputText name="url" label="WEB" defaultValue={user?.url} error={checkError('url')?.url} />
-              <InputPhone
-                defaultValue1={user?.phone1}
-                defaultValue2={user?.phone2}
-                defaultValue3={user?.phone3}
-                errorPhone1={checkError('phone1')?.phone1}
-                errorPhone2={checkError('phone2')?.phone2}
-                errorPhone3={checkError('phone3')?.phone3}
-              />
-              <InputEmail defaultValue={user?.email} error={checkError('email')?.email} />
-            </>
-          )}
-          {isLoading && (
-            <>
-              <LoadingForm label="NAME" />
-              <LoadingForm label="WEB" />
-              <LoadingForm label="PHONE" />
-              <LoadingForm label="EMAIL" />
-            </>
-          )}
-        </div>
-        <div className="flex flex-col items-center justify-start gap-[10px] w-full h-[80px]">
-          <SquareButton type="submit" label="CREATE" />
-        </div>
-      </form>
-    </>
+    <form action={formAction} className="flex flex-col items-center justify-start gap-[30px] w-full md:max-w-[400px] px-[20px] pb-[30px]">
+      <div className="flex flex-col items-center justify-start gap-[20px] w-full min-h-[296px]">
+        {!isLoading && (
+          <>
+            <InputText name="name" label="NAME" defaultValue={user?.name} errors={checkErrors('name')} />
+            <InputText name="url" label="WEB" defaultValue={user?.url} errors={checkErrors('url')} />
+            <InputPhone
+              defaultValue1={user?.phone1}
+              defaultValue2={user?.phone2}
+              defaultValue3={user?.phone3}
+              errorsPhone1={checkErrors('phone1')}
+              errorsPhone2={checkErrors('phone2')}
+              errorsPhone3={checkErrors('phone3')}
+            />
+            <InputEmail defaultValue={user?.email} errors={checkErrors('email')} />
+          </>
+        )}
+        {isLoading && (
+          <>
+            <LoadingForm label="NAME" />
+            <LoadingForm label="WEB" />
+            <LoadingForm label="PHONE" />
+            <LoadingForm label="EMAIL" />
+          </>
+        )}
+      </div>
+      <div className="flex flex-col items-center justify-start gap-[10px] w-full h-[80px]">
+        <SquareButton type="submit" label="CREATE" />
+      </div>
+    </form>
   )
 }

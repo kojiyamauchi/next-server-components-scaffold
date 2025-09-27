@@ -30,6 +30,12 @@ export const pagesPath = {
     $url: (url?: { hash?: string }) => ({ pathname: '/secondary' as const, hash: url?.hash, path: `/secondary${buildSuffix(url)}` })
   },
   $url: (url?: { hash?: string }) => ({ pathname: '' as const, hash: url?.hash, path: `${buildSuffix(url)}` }),
+  'authed': {
+    $url: (url?: { hash?: string }) => ({ pathname: '/authed' as const, hash: url?.hash, path: `/authed${buildSuffix(url)}` })
+  },
+  'login': {
+    $url: (url?: { hash?: string }) => ({ pathname: '/login' as const, hash: url?.hash, path: `/login${buildSuffix(url)}` })
+  },
   'shopping': {
     $url: (url?: { hash?: string }) => ({ pathname: '/shopping' as const, hash: url?.hash, path: `/shopping${buildSuffix(url)}` })
   },
