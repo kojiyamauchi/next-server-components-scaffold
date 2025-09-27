@@ -19,11 +19,9 @@ export const TimestampContainer: React.FC<Props> = async ({ id }) => {
   }
 
   return (
-    <>
-      <Timestamp
-        createAt={dayjs(user.createAt).tz('Asia/Tokyo').format('YYYY-MM-DD HH:mm:ss')}
-        updateAt={dayjs(user.updateAt).tz('Asia/Tokyo').format('YYYY-MM-DD HH:mm:ss')}
-      />
-    </>
+    <Timestamp
+      createAt={dayjs(user.createAt).tz('Asia/Tokyo').format('YYYY-MM-DD HH:mm:ss')}
+      updateAt={dayjs(user.updateAt).tz('Asia/Tokyo').format('YYYY-MM-DD HH:mm:ss')}
+    />
   )
 }
