@@ -4,7 +4,7 @@ import { pagesPath } from '@/libs'
 
 import { deleteUserRepo } from '../../repositories'
 
-export const deleteUser = async (id: number | undefined): Promise<{ isSuccess: boolean; path: string }> => {
+export const deleteUserAction = async (id: number | undefined): Promise<{ isSuccess: boolean; path: string }> => {
   if (typeof id !== 'number' || isNaN(id)) {
     console.error('Validate Error - Id is not number type')
     throw new Error('Validate Error - Id is not number type')

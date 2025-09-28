@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, jest } from '@jest/globals'
 
 import { createUserRepo } from '../../repositories'
 import { CreateUserStateType } from '../states'
-import { createUser } from './index'
+import { createUserAction } from './index'
 
 jest.mock('../../repositories')
 jest.mock('@/libs', () => ({
@@ -59,7 +59,7 @@ describe('ユーザー作成アクション', () => {
         email: 'test@example.com',
       })
 
-      const result = await createUser(initialState, formData)
+      const result = await createUserAction(initialState, formData)
 
       expect(result.success).toBe(true)
       expect(result.message).toBe(null)
@@ -87,7 +87,7 @@ describe('ユーザー作成アクション', () => {
         email: 'test@example.com',
       })
 
-      const result = await createUser(initialState, formData)
+      const result = await createUserAction(initialState, formData)
 
       expect(result.success).toBe(false)
       expect(result.message).toBe('エラー項目があります')
@@ -110,7 +110,7 @@ describe('ユーザー作成アクション', () => {
       const repoError = new Error('Database connection failed')
       mockCreateUserRepo.mockRejectedValue(repoError)
 
-      await expect(createUser(initialState, formData)).rejects.toThrow('Internal Server Error')
+      await expect(createUserAction(initialState, formData)).rejects.toThrow('Internal Server Error')
     })
   })
 })

@@ -9,7 +9,7 @@ import { InputText } from '@/components/InputText'
 import { LoadingForm } from '@/components/LoadingForm'
 import { SquareButton } from '@/components/SquareButton'
 
-import { createUser, type CreateUserStateType, userInitialState } from '../actions'
+import { createUserAction, type CreateUserStateType, userInitialState } from '../actions'
 import type { CreateUserSchemaType } from '../schemas'
 
 export const CreateUserContainer: React.FC = () => {
@@ -17,7 +17,7 @@ export const CreateUserContainer: React.FC = () => {
 
   const [user, setUser] = useState<CreateUserSchemaType | null>(null)
   const [isRouterBeforeLeave, setIsRouterBeforeLeave] = useState<boolean>(false)
-  const [state, formAction, isPending] = useActionState<CreateUserStateType, FormData>(createUser, userInitialState)
+  const [state, formAction, isPending] = useActionState<CreateUserStateType, FormData>(createUserAction, userInitialState)
 
   useEffect(() => {
     if (state.success && !!state.createId && state.redirectPath) {

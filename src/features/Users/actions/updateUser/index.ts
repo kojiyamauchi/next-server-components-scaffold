@@ -9,7 +9,7 @@ import { updateUserRepo } from '../../repositories'
 import { updateUserSchema, type UpdateUserSchemaType } from '../../schemas'
 import type { UserStateType } from '../states'
 
-export const updateUser = async (prevState: UserStateType, formData: FormData): Promise<UserStateType> => {
+export const updateUserAction = async (prevState: UserStateType, formData: FormData): Promise<UserStateType> => {
   const formatForm: UpdateUserSchemaType = {
     id: Number(formData.get('id')),
     name: formData.get('name') as string,

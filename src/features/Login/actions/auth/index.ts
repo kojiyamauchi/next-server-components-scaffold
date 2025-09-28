@@ -2,8 +2,7 @@
 
 import type { AuthResponse, AuthTokenResponsePassword } from '@supabase/supabase-js'
 
-import { pagesPath } from '@/libs'
-import { supabaseServerClient } from '@/libs'
+import { pagesPath, supabaseServerClient } from '@/libs'
 
 import { authSchema, type AuthSchemaType } from '../../schemas'
 import { AuthStateType } from '../state'
