@@ -10,7 +10,7 @@ jest.mock('@/libs', () => ({
 }))
 
 import { fetchUsersRepo } from '../../repositories'
-import { getUsers } from './index'
+import { getUsersAction } from './index'
 
 jest.mock('../../repositories')
 
@@ -46,7 +46,7 @@ describe('ユーザー一覧取得アクション', () => {
 
       mockFetchUsersRepo.mockResolvedValue(mockUsers)
 
-      const result = await getUsers()
+      const result = await getUsersAction()
 
       expect(result).toEqual(mockUsers)
       expect(result).toHaveLength(2)
@@ -56,7 +56,7 @@ describe('ユーザー一覧取得アクション', () => {
     it('ユーザーが存在しない場合空配列を返す', async () => {
       mockFetchUsersRepo.mockResolvedValue([])
 
-      const result = await getUsers()
+      const result = await getUsersAction()
 
       expect(result).toEqual([])
       expect(result).toHaveLength(0)
@@ -68,7 +68,7 @@ describe('ユーザー一覧取得アクション', () => {
       const repoError = new Error('Database connection failed')
       mockFetchUsersRepo.mockRejectedValue(repoError)
 
-      await expect(getUsers()).rejects.toThrow('Internal Server Error')
+      await expect(getUsersAction()).rejects.toThrow('Internal Server Error')
       expect(mockFetchUsersRepo).toHaveBeenCalledTimes(1)
     })
   })

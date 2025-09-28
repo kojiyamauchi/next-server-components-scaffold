@@ -10,7 +10,7 @@ jest.mock('@/libs', () => ({
 }))
 
 import { fetchUserRepo } from '../../repositories'
-import { getUser } from './index'
+import { getUserAction } from './index'
 
 jest.mock('../../repositories')
 
@@ -33,7 +33,7 @@ describe('ユーザー取得アクション', () => {
         update_at: new Date(),
       })
 
-      const result = await getUser(1)
+      const result = await getUserAction(1)
 
       expect(result).toEqual({
         id: 1,
@@ -54,7 +54,7 @@ describe('ユーザー取得アクション', () => {
     it('ユーザーが見つからない場合nullを返す', async () => {
       mockFetchUserRepo.mockResolvedValue(null)
 
-      const result = await getUser(999)
+      const result = await getUserAction(999)
 
       expect(result).toBe(null)
       expect(mockFetchUserRepo).toHaveBeenCalledWith(999)
@@ -66,7 +66,7 @@ describe('ユーザー取得アクション', () => {
       const repoError = new Error('Database connection failed')
       mockFetchUserRepo.mockRejectedValue(repoError)
 
-      await expect(getUser(1)).rejects.toThrow('Internal Server Error')
+      await expect(getUserAction(1)).rejects.toThrow('Internal Server Error')
       expect(mockFetchUserRepo).toHaveBeenCalledWith(1)
     })
   })

@@ -21,7 +21,7 @@ import { revalidatePath } from 'next/cache'
 
 import { updateUserRepo } from '../../repositories'
 import { UserStateType } from '../states'
-import { updateUser } from './index'
+import { updateUserAction } from './index'
 
 const mockRevalidatePath = revalidatePath as jest.MockedFunction<typeof revalidatePath>
 const mockUpdateUserRepo = updateUserRepo as jest.MockedFunction<typeof updateUserRepo>
@@ -67,7 +67,7 @@ describe('ユーザー更新アクション', () => {
         email: 'test@example.com',
       })
 
-      const result = await updateUser(initialState, formData)
+      const result = await updateUserAction(initialState, formData)
 
       expect(result.success).toBe(true)
       expect(result.message).toBe(null)
@@ -105,7 +105,7 @@ describe('ユーザー更新アクション', () => {
         email: 'test@example.com',
       })
 
-      const result = await updateUser(initialState, formData)
+      const result = await updateUserAction(initialState, formData)
 
       expect(result.success).toBe(false)
       expect(result.message).toBe('エラー項目があります')
@@ -125,7 +125,7 @@ describe('ユーザー更新アクション', () => {
         email: 'test@example.com',
       })
 
-      const result = await updateUser(initialState, formData)
+      const result = await updateUserAction(initialState, formData)
 
       expect(result.success).toBe(false)
       expect(result.message).toBe('エラー項目があります')
@@ -144,7 +144,7 @@ describe('ユーザー更新アクション', () => {
         email: 'invalid-email',
       })
 
-      const result = await updateUser(initialState, formData)
+      const result = await updateUserAction(initialState, formData)
 
       expect(result.success).toBe(false)
       expect(result.message).toBe('エラー項目があります')
@@ -168,7 +168,7 @@ describe('ユーザー更新アクション', () => {
       const repoError = new Error('Database connection failed')
       mockUpdateUserRepo.mockRejectedValue(repoError)
 
-      await expect(updateUser(initialState, formData)).rejects.toThrow('Internal Server Error')
+      await expect(updateUserAction(initialState, formData)).rejects.toThrow('Internal Server Error')
       expect(mockRevalidatePath).not.toHaveBeenCalled()
     })
   })

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals'
 
 import { deleteUserRepo } from '../../repositories'
-import { deleteUser } from './index'
+import { deleteUserAction } from './index'
 
 jest.mock('../../repositories')
 jest.mock('@/libs', () => ({
@@ -32,7 +32,7 @@ describe('ユーザー削除アクション', () => {
 
   describe('有効なID', () => {
     it('正しいIDでユーザーを削除する', async () => {
-      const result = await deleteUser(1)
+      const result = await deleteUserAction(1)
 
       expect(result.isSuccess).toBe(true)
       expect(result.path).toBe('/users')
@@ -42,12 +42,12 @@ describe('ユーザー削除アクション', () => {
 
   describe('無効なID', () => {
     it('undefinedのIDでエラーを投げる', async () => {
-      await expect(deleteUser(undefined)).rejects.toThrow('Validate Error - Id is not number type')
+      await expect(deleteUserAction(undefined)).rejects.toThrow('Validate Error - Id is not number type')
       expect(mockDeleteUserRepo).not.toHaveBeenCalled()
     })
 
     it('NaNでエラーを投げる', async () => {
-      await expect(deleteUser(NaN)).rejects.toThrow('Validate Error - Id is not number type')
+      await expect(deleteUserAction(NaN)).rejects.toThrow('Validate Error - Id is not number type')
       expect(mockDeleteUserRepo).not.toHaveBeenCalled()
     })
   })
@@ -57,7 +57,7 @@ describe('ユーザー削除アクション', () => {
       const repoError = new Error('User not found')
       mockDeleteUserRepo.mockRejectedValue(repoError)
 
-      await expect(deleteUser(1)).rejects.toThrow('Internal Server Error')
+      await expect(deleteUserAction(1)).rejects.toThrow('Internal Server Error')
       expect(mockDeleteUserRepo).toHaveBeenCalledWith(1)
     })
   })
