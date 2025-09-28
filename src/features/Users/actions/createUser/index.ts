@@ -8,7 +8,7 @@ import { createUserRepo } from '../../repositories'
 import { createUserSchema, type CreateUserSchemaType } from '../../schemas'
 import type { CreateUserStateType } from '../states'
 
-export const createUser = async (prevState: CreateUserStateType, formData: FormData): Promise<CreateUserStateType> => {
+export const createUserAction = async (prevState: CreateUserStateType, formData: FormData): Promise<CreateUserStateType> => {
   const formatForm: CreateUserSchemaType = {
     name: formData.get('name') as string,
     url: formData.get('url') as string,

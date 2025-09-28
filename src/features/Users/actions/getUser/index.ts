@@ -3,7 +3,7 @@
 import { fetchUserRepo } from '../../repositories'
 import type { UserSchemaType } from '../../schemas'
 
-export const getUser = async (id: number): Promise<UserSchemaType | null> => {
+export const getUserAction = async (id: number): Promise<UserSchemaType | null> => {
   try {
     const user = await fetchUserRepo(id)
 

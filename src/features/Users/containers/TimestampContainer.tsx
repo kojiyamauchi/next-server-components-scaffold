@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 
-import { getUser } from '../actions'
+import { getUserAction } from '../actions'
 import { Timestamp } from '../components/Timestamp'
 
 dayjs.extend(utc)
@@ -12,7 +12,7 @@ type Props = {
   id: number
 }
 export const TimestampContainer: React.FC<Props> = async ({ id }) => {
-  const user = await getUser(id)
+  const user = await getUserAction(id)
 
   if (!user) {
     return null

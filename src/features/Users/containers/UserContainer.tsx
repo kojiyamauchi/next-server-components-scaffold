@@ -9,7 +9,7 @@ import { InputText } from '@/components/InputText'
 import { LoadingForm } from '@/components/LoadingForm'
 import { SquareButton } from '@/components/SquareButton'
 
-import { deleteUser, getUser, updateUser, userInitialState, type UserStateType } from '../actions'
+import { deleteUserAction, getUserAction, updateUserAction, userInitialState, type UserStateType } from '../actions'
 import type { UpdateUserSchemaType } from '../schemas'
 
 type Props = {
@@ -20,12 +20,12 @@ export const UserContainer: React.FC<Props> = ({ id }: Props) => {
   const router = useRouter()
 
   const [user, setUser] = useState<{ isLoading: boolean; isFetched: boolean; data: UserStateType['data'] }>({ isLoading: false, isFetched: false, data: null })
-  const [state, formAction, isPending] = useActionState<UserStateType, FormData>(updateUser, userInitialState)
+  const [state, formAction, isPending] = useActionState<UserStateType, FormData>(updateUserAction, userInitialState)
 
   useEffect(() => {
     setUser({ isLoading: true, isFetched: false, data: null })
     void (async (): Promise<void> => {
-      const user = await getUser(id)
+      const user = await getUserAction(id)
       setUser({ isLoading: false, isFetched: true, data: user })
     })()
   }, [id])
@@ -54,7 +54,7 @@ export const UserContainer: React.FC<Props> = ({ id }: Props) => {
       setUser((prev) => {
         return { ...prev, isLoading: true }
       })
-      const result = await deleteUser(id)
+      const result = await deleteUserAction(id)
 
       if (result.isSuccess) {
         router.push(result.path)

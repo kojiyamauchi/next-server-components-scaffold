@@ -5,14 +5,14 @@ import Link from 'next/link'
 
 import { pagesPath } from '@/libs'
 
-import { getUsers } from '../actions'
+import { getUsersAction } from '../actions'
 import { List } from '../components/List'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
 export const UsersContainer: React.FC = async () => {
-  const users = await getUsers()
+  const users = await getUsersAction()
 
   return (
     <>
