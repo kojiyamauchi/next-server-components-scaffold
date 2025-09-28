@@ -100,12 +100,15 @@ yarn prisma:studio
 - 設定：Reactテスト用のjsdom環境を使用
 - モジュールエイリアス：`@/*` は `src/*` にマップ
 - テスト実行：`yarn jest`
+- **テストデータ生成**：@faker-js/fakerによる動的テストデータ作成
 
 ### Storybook + Vitest設定
 
 - Storybookコンポーネントのテスト用にVitestを設定
 - ブラウザテスト：Playwrightプロバイダーを使用
 - テスト実行：Storybookサーバー経由で自動実行
+- **カバレッジ測定**：@vitest/coverage-v8による詳細なカバレッジ分析
+- **ブラウザテスト**：@vitest/browserによる実ブラウザ環境テスト
 
 ## コード品質とスタイル
 
@@ -144,6 +147,11 @@ yarn prisma:studio
 - **ルーティング**：pathpidaによる型安全なルーティング（`src/libs/path/`に自動生成）
 - **UI開発**：Storybook 9.x（アクセシビリティ、ドキュメンテーション、テスト統合）
 - **状態管理**：Server Actions + React Server Components（featuresディレクトリ内のactionsで管理）
+- **環境変数管理**：@t3-oss/env-nextjsによる型安全な環境変数
+- **日付処理**：dayjs（軽量ライブラリ採用）
+- **UI Kit**：@headlessui/react（アクセシビリティ対応）
+- **テストツール**：Jest（単体テスト）+ Vitest（Storybookテスト）+ Playwright（E2Eテスト）
+- **開発体験**：tsx（TypeScript直接実行）+ npm-run-all（並列実行）
 
 ## ファイル構造規約
 
@@ -173,6 +181,15 @@ yarn prisma:studio
 - **Husky + lint-staged**: プリコミットフックによるコード品質維持
 - **CSpell**: プロジェクト全体のスペルチェック
 - **npm-run-all**: 並列コマンド実行（`run-p`コマンド）
+- **@t3-oss/env-nextjs**: 型安全な環境変数管理
+- **@faker-js/faker**: テストデータ生成
+- **dayjs**: 軽量な日付ライブラリ
+- **tsx**: TypeScriptファイル直接実行（Prismaシード等）
+- **@headlessui/react**: アクセシブルなUIコンポーネント
+- **react-loading-skeleton**: ローディングスケルトンUI
+- **@supabase/ssr**: Supabase SSR対応
+- **Vitest**: Storybookテスト実行エンジン
+- **Playwright**: ブラウザテスト自動化
 
 ## データベーススキーマ
 
@@ -186,6 +203,224 @@ yarn prisma:studio
 
 詳細は`prisma/schema.prisma`を参照してください。
 
+## 環境変数管理
+
+### @t3-oss/env-nextjs統合
+
+型安全な環境変数管理を実装：
+
+```bash
+# 環境変数の型定義と実行時チェック
+DATABASE_URL=          # サーバーサイド環境変数
+DIRECT_URL=           # Prisma Direct URL
+NEXT_PUBLIC_SUPABASE_URL=      # クライアントサイド環境変数
+NEXT_PUBLIC_SUPABASE_ANON_KEY= # Supabase匿名キー
+```
+
+### 設定ファイル
+
+- **開発環境**: `.env.local`
+- **型定義**: `src/libs/env.ts`
+- **バリデーション**: Zodスキーマによる実行時チェック
+
+## UIライブラリ・コンポーネント
+
+### 採用ライブラリ
+
+- **@headlessui/react**: アクセシブルなヘッドレスUIコンポーネント
+- **react-loading-skeleton**: ローディング状態のスケルトンUI
+- **Tailwind CSS 4**: ユーティリティファーストCSSフレームワーク
+
+### デザインシステム
+
+- **アクセシビリティ**: @headlessui/reactによるWAI-ARIA準拠
+- **レスポンシブ**: Tailwind CSSのブレークポイント活用
+- **ローディング**: react-loading-skeletonによる一貫したローディングUX
+
+## CI/CD（GitHub Actions）
+
+このプロジェクトでは3つのGitHub Actionsワークフローで包括的なCI/CDパイプラインを構築しています。
+
+### ワークフロー構成
+
+#### 1. Pull Request CI (`ci.yml`)
+
+```yaml
+# 実行トリガー: main ブランチへのPR作成・更新時
+# 環境: Node.js 22.x, Yarn 4.6.0, PostgreSQL 15
+```
+
+**ジョブフロー**:
+
+```
+setup → [cspell, eslint, typecheck, jest] (並列実行) → build-test → [deploy-app-preview, deploy-storybook-preview] (並列実行)
+```
+
+**品質チェック項目**:
+
+- **CSpell**: スペルチェック（reviewdog統合でPRレビューコメント自動投稿）
+- **ESLint**: コード品質チェック（`.ts/.mjs/.js`ファイル対象、reviewdog統合）
+- **TypeScript**: 型チェック（EPMatt/reviewdog-action-tsc使用、警告レベル表示）
+- **Jest**: ユニットテスト（テストファイル存在時のみ実行、動的スキップ機能）
+- **Build Test**: PostgreSQL環境でのPrismaマイグレーション + Next.jsビルドテスト
+
+**Vercelプレビューデプロイ**:
+
+- Next.jsアプリとStorybookを別プロジェクトとして並列デプロイ
+- 環境変数の動的設定・削除・追加・検証プロセス
+- PRへのデプロイURL自動コメント投稿機能
+- プレビュー用データベース環境での動作確認
+
+#### 2. Production CI (`production.yml`)
+
+```yaml
+# 実行トリガー: main ブランチへのpush（マージ後）
+# 環境: Pull Request CIと同一設定
+```
+
+**本番デプロイ特徴**:
+
+- Pull Request CIの全品質チェックを再実行
+- プロダクション環境への自動デプロイ
+- 本番データベースでのPrismaマイグレーション実行
+- Next.jsアプリとStorybookの並列プロダクションデプロイ
+
+#### 3. Local Test (`local.yml`)
+
+```yaml
+# 実行トリガー: workflow_call（手動実行・他ワークフロー呼び出し）
+# 用途: ローカル環境の再現、最小限のビルドテスト
+```
+
+### 技術的特徴
+
+#### 高度なキャッシュ戦略
+
+- `yarn.lock`ハッシュベースのnode_modulesキャッシュ
+- setup ジョブでの依存関係一元管理
+- 後続ジョブでのキャッシュ復元による高速化
+
+#### 条件分岐による最適化
+
+```bash
+# 各チェック項目の個別ON/OFF制御
+LAUNCH_CSPELL: on/off    # CSpellチェック
+LAUNCH_ESLINT: on/off    # ESLintチェック
+LAUNCH_TYPECHECK: on/off # TypeScriptチェック
+LAUNCH_JEST: on/off      # Jestテスト
+LAUNCH_BUILD: on/off     # ビルドテスト
+LAUNCH_DEPLOY: on/off    # デプロイ実行
+
+# テストファイル存在チェックによる動的スキップ
+if find src -type f \( -name "*.test.ts" -o -name "*.test.js" \) | grep -q .;
+```
+
+#### reviewdog統合による高品質なPRレビュー
+
+- **CSpell**: 警告レベルでのスペルミス指摘
+- **ESLint**: コード品質問題の自動コメント
+- **TypeScript**: 型エラーの詳細表示
+- すべてGitHub PR ReviewとしてUI上に表示
+
+#### PostgreSQL統合テスト環境
+
+```yaml
+services:
+  postgres:
+    image: postgres:15
+    env:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: test
+    options: >-
+      --health-cmd "pg_isready -U test"
+      --health-interval 10s
+      --health-timeout 5s
+      --health-retries 5
+```
+
+#### Vercel環境変数管理
+
+- プレビュー/プロダクション環境での動的環境変数設定
+- 環境変数の削除→追加→検証フロー
+- Supabase環境変数の自動設定
+- データベースURLの環境別管理
+
+#### 並列デプロイ戦略
+
+- Next.jsアプリケーション（メイン機能）
+- Storybook（UIコンポーネントドキュメント）
+- それぞれ独立したVercelプロジェクトとして管理
+
+### 実行権限とセキュリティ
+
+```yaml
+permissions:
+  contents: read # リポジトリ内容の読み取り
+  deployments: write # デプロイメント管理
+  pull-requests: write # PRコメント投稿
+```
+
+### 必要なGitHub Secrets
+
+```bash
+# Vercel関連（メインアプリ）
+VERCEL_TOKEN                    # Vercel CLI認証トークン
+VERCEL_ORG_ID                   # Vercel組織ID
+VERCEL_PROJECT_ID               # VercelプロジェクトID
+
+# Vercel関連（Storybook）
+STORYBOOK_VERCEL_TOKEN          # Storybook用Vercelトークン
+STORYBOOK_VERCEL_PROJECT_ID     # StorybookプロジェクトID
+
+# データベース関連（プレビュー環境）
+PREVIEW_DATABASE_URL            # プレビュー用データベースURL
+PREVIEW_DIRECT_URL              # プレビュー用ダイレクトURL
+PREVIEW_NEXT_PUBLIC_SUPABASE_URL         # プレビュー用SupabaseURL
+PREVIEW_NEXT_PUBLIC_SUPABASE_ANON_KEY    # プレビュー用Supabase匿名キー
+
+# データベース関連（本番環境）
+PRODUCTION_DATABASE_URL         # 本番用データベースURL
+PRODUCTION_DIRECT_URL           # 本番用ダイレクトURL
+PRODUCTION_NEXT_PUBLIC_SUPABASE_URL      # 本番用SupabaseURL
+PRODUCTION_NEXT_PUBLIC_SUPABASE_ANON_KEY # 本番用Supabase匿名キー
+```
+
+### CI/CDフロー実行例
+
+#### Pull Request作成時
+
+1. **並列品質チェック**: CSpell, ESLint, TypeScript, Jest
+2. **ビルドテスト**: PostgreSQL環境でのマイグレーション + ビルド
+3. **プレビューデプロイ**: Next.js + Storybook並列デプロイ
+4. **PRコメント**: デプロイURLの自動通知
+
+#### Main ブランチマージ時
+
+1. **全品質チェック再実行**: プロダクション品質保証
+2. **本番デプロイ**: プロダクション環境への自動デプロイ
+3. **本番データベース**: Prismaマイグレーション適用
+
+### トラブルシューティング
+
+#### ワークフロー失敗時の対処
+
+```bash
+# 個別チェック項目の無効化（緊急時）
+env:
+  LAUNCH_ESLINT: off     # ESLintをスキップ
+  LAUNCH_JEST: off       # Jestをスキップ
+
+# ローカルでの再現確認
+yarn cspell --dot --no-must-find-files "**/*"  # CSpell実行
+yarn lint                                        # ESLint実行
+yarn typecheck                                  # TypeScript実行
+yarn jest                                        # Jest実行
+yarn build-test                                 # ビルドテスト実行
+```
+
+このCI/CDパイプラインにより、コード品質の維持、自動デプロイ、プレビュー環境での確認を効率的に実現しています。
+
 ## Claude Code Agent設定
 
 このプロジェクトでは以下のagentが設定されています：
@@ -193,6 +428,7 @@ yarn prisma:studio
 ### 利用可能なAgent
 
 #### 1. general-purpose（デフォルト）
+
 - **用途**: 新規開発、実装、調査、テスト作成
 - **得意分野**:
   - 新規コンポーネント・機能の実装
@@ -202,6 +438,7 @@ yarn prisma:studio
   - 複雑な多段階タスクの実行
 
 #### 2. test-automation-specialist
+
 - **用途**: テスト実行、失敗分析、テスト修正
 - **得意分野**:
   - Jestテストスイートの自動実行
@@ -213,6 +450,7 @@ yarn prisma:studio
 ### Agent使い分けガイド
 
 #### 日常的な開発作業（general-purposeが自動使用）
+
 ```bash
 # 新規作成・実装
 user: "新しいコンポーネントのテストを作成してください"
@@ -225,6 +463,7 @@ user: "パフォーマンス改善の方法を提案してください"
 ```
 
 #### テスト自動化が必要な場合（test-automation-specialistが自動選択）
+
 ```bash
 # テスト実行・修正
 user: "コード変更後のテストを実行してください"
@@ -257,17 +496,20 @@ ls .claude/agents/  # 利用可能なagent一覧
 プロジェクトでは日本語を多用するため、文字化けを防ぐための設定が重要です：
 
 #### 1. ファイル作成時の注意点
+
 ```bash
 # ファイル作成時はUTF-8エンコーディングを必須とする
 # 特にテストファイルやドキュメントファイルで日本語を使用する場合
 ```
 
 #### 2. エディタ設定
+
 - **VSCode**: `"files.encoding": "utf8"` を設定
 - **WebStorm**: File Encodings で UTF-8 を指定
 - **Vim**: `set encoding=utf-8` を.vimrcに追加
 
 #### 3. Git設定
+
 ```bash
 # Git設定でUTF-8を指定
 git config --global core.quotepath false
@@ -275,6 +517,7 @@ git config --global core.precomposeunicode true
 ```
 
 #### 4. Node.js/Jest設定
+
 ```bash
 # 環境変数でUTF-8を指定
 export LANG=ja_JP.UTF-8
@@ -282,6 +525,7 @@ export LC_ALL=ja_JP.UTF-8
 ```
 
 #### 5. 文字化け発生時の対処法
+
 ```bash
 # ファイルを削除して再作成
 rm [文字化けファイル]
