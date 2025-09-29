@@ -15,6 +15,7 @@ export const authAction = async (prevState: AuthStateType, formData: FormData): 
     password: formData.get('password') as string,
     login: formData.get('login') !== null,
     signup: formData.get('signup') !== null,
+    from: formData.get('from') as AuthSchemaType['from'],
   }
 
   const validateResult = authSchema.safeParse(formatForm)
@@ -41,7 +42,12 @@ export const authAction = async (prevState: AuthStateType, formData: FormData): 
     success: validateResult.success,
     message: null,
     data: validateResult.data,
-    redirectPath: pagesPath.authed.$url().path,
+    redirectPath: ((): string => {
+      if (validateResult.data.from === 'shopping') {
+        return pagesPath.shopping.$url().path
+      }
+      return pagesPath.authed.$url().path
+    })(),
     validateErrors: null,
     authError: false,
   }

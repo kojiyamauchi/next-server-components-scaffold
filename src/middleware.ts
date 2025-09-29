@@ -20,10 +20,14 @@ export const middleware = async (request: NextRequest): Promise<NextResponse> =>
   } = await supabase.auth.getUser()
 
   if (!user && request.nextUrl.pathname.startsWith('/authed')) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    return NextResponse.redirect(new URL('/login?from=authed', request.url))
+  }
+
+  if (!user && request.nextUrl.pathname.startsWith('/shopping')) {
+    return NextResponse.redirect(new URL('/login?from=shopping', request.url))
   }
 
   return supabaseResponse
 }
 
-export const config = { matcher: ['/authed/:path*'] }
+export const config = { matcher: ['/authed/:path*', '/shopping/:path*'] }

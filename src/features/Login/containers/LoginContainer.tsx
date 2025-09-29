@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useActionState, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { InputEmail } from '@/components/InputEmail'
@@ -13,6 +13,10 @@ import type { AuthSchemaType } from '../schemas'
 
 export const LoginContainer: React.FC = () => {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const fromParam = useMemo(() => {
+    return searchParams.get('from')
+  }, [searchParams])
 
   const [login, setLogin] = useState<AuthSchemaType | null>(null)
   const [isRouterBeforeLeave, setIsRouterBeforeLeave] = useState<boolean>(false)
@@ -62,6 +66,7 @@ export const LoginContainer: React.FC = () => {
           <SquareButton type="submit" name="login" label="LOGIN" />
           <SquareButton type="submit" name="signup" label="SIGNUP" />
         </div>
+        {fromParam && <input type="hidden" name="from" value={fromParam} />}
       </form>
       {state.authError && <span className="text-[22px] text-[#b61414] font-bold px-[6px]">{state.message}</span>}
     </>
