@@ -1,9 +1,15 @@
 import { Login } from '@/features/Login/pages'
 
-const Page: React.FC = () => {
+type Props = {
+  searchParams: Promise<{ from: string | string[] | undefined }>
+}
+
+const Page: React.FC<Props> = async ({ searchParams }) => {
+  const { from } = await searchParams
+
   return (
     <>
-      <Login />
+      <Login from={from} />
     </>
   )
 }

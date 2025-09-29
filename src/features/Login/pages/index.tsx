@@ -2,7 +2,11 @@ import { Heading } from '@/components/Heading'
 
 import { LoginContainer } from '../containers/LoginContainer'
 
-export const Login: React.FC = () => {
+type Props = {
+  from: string | string[] | undefined
+}
+
+export const Login: React.FC<Props> = ({ from }) => {
   return (
     <>
       <div className="pb-[10px]">
@@ -16,7 +20,7 @@ export const Login: React.FC = () => {
             <span className="inline-block translate-y-[3px]">✏️</span>
           </dd>
         </dl>
-        <LoginContainer />
+        <LoginContainer from={from} />
       </div>
     </>
   )

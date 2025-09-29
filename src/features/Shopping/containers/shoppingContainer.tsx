@@ -7,7 +7,7 @@ import { LogoutButton } from '@/components/LogoutButton'
 
 import { logoutAction } from '../actions/logout'
 
-export const AuthedContainer: React.FC = () => {
+export const ShoppingContainer: React.FC = () => {
   const router = useRouter()
   const [message, setMessage] = useState<string | null>(null)
 

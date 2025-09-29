@@ -12,6 +12,7 @@ export const authSchema = z.object({
     .regex(/[^a-zA-Z0-9]/, '記号を含めてください'),
   login: z.boolean(),
   signup: z.boolean(),
+  from: z.enum(['authed', 'shopping']).nullable(),
 })
 
 export type AuthSchemaType = z.infer<typeof authSchema>

@@ -8,6 +8,7 @@ describe('認証スキーマ', () => {
     password: 'Password123!',
     login: true,
     signup: false,
+    from: null,
   }
 
   describe('有効なデータ', () => {
@@ -24,6 +25,42 @@ describe('認証スキーマ', () => {
         ...validAuthData,
         login: false,
         signup: false,
+      }
+      const result = authSchema.safeParse(data)
+      expect(result.success).toBe(true)
+      if (result.success) {
+        expect(result.data).toEqual(data)
+      }
+    })
+
+    it('fromフィールドが"authed"の場合に検証を通す', () => {
+      const data = {
+        ...validAuthData,
+        from: 'authed' as const,
+      }
+      const result = authSchema.safeParse(data)
+      expect(result.success).toBe(true)
+      if (result.success) {
+        expect(result.data).toEqual(data)
+      }
+    })
+
+    it('fromフィールドが"shopping"の場合に検証を通す', () => {
+      const data = {
+        ...validAuthData,
+        from: 'shopping' as const,
+      }
+      const result = authSchema.safeParse(data)
+      expect(result.success).toBe(true)
+      if (result.success) {
+        expect(result.data).toEqual(data)
+      }
+    })
+
+    it('fromフィールドがnullの場合に検証を通す', () => {
+      const data = {
+        ...validAuthData,
+        from: null,
       }
       const result = authSchema.safeParse(data)
       expect(result.success).toBe(true)
@@ -292,8 +329,52 @@ describe('認証スキーマ', () => {
       const result = authSchema.safeParse({})
       expect(result.success).toBe(false)
       if (!result.success) {
-        expect(result.error.issues.length).toBe(4)
+        expect(result.error.issues.length).toBe(5) // email, password, login, signup, from (fromも必須のためエラーになる)
       }
+    })
+  })
+
+  describe('fromフィールドバリデーション', () => {
+    it('有効なfrom値"authed"を受け入れる', () => {
+      const result = authSchema.safeParse({ ...validAuthData, from: 'authed' })
+      expect(result.success).toBe(true)
+    })
+
+    it('有効なfrom値"shopping"を受け入れる', () => {
+      const result = authSchema.safeParse({ ...validAuthData, from: 'shopping' })
+      expect(result.success).toBe(true)
+    })
+
+    it('null値のfromを受け入れる', () => {
+      const result = authSchema.safeParse({ ...validAuthData, from: null })
+      expect(result.success).toBe(true)
+    })
+
+    it('無効なfrom値を拒否する', () => {
+      const result = authSchema.safeParse({ ...validAuthData, from: 'invalid' })
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error.issues[0].message).toContain('Invalid option')
+      }
+    })
+
+    it('文字列以外のfrom値を拒否する', () => {
+      const result = authSchema.safeParse({ ...validAuthData, from: 123 })
+      expect(result.success).toBe(false)
+    })
+
+    it('空文字列のfrom値を拒否する', () => {
+      const result = authSchema.safeParse({ ...validAuthData, from: '' })
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error.issues[0].message).toContain('Invalid option')
+      }
+    })
+
+    it('fromフィールドの欠落を拒否する（fromは必須フィールド）', () => {
+      const { from: _from, ...dataWithoutFrom } = validAuthData
+      const result = authSchema.safeParse(dataWithoutFrom)
+      expect(result.success).toBe(false)
     })
   })
 
@@ -304,11 +385,13 @@ describe('認証スキーマ', () => {
         password: 'Password123!',
         login: true,
         signup: false,
+        from: null,
       }
       expect(authData.email).toBe('test@example.com')
       expect(authData.password).toBe('Password123!')
       expect(authData.login).toBe(true)
       expect(authData.signup).toBe(false)
+      expect(authData.from).toBe(null)
     })
   })
 })

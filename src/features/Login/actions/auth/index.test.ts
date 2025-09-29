@@ -20,6 +20,11 @@ jest.mock('@/libs', () => ({
         path: '/authed',
       }),
     },
+    shopping: {
+      $url: (): { path: string } => ({
+        path: '/shopping',
+      }),
+    },
   },
   supabaseServerClient: jest.fn(),
 }))
@@ -39,14 +44,14 @@ describe('認証アクション', () => {
     mockSupabaseServerClient.mockResolvedValue(mockSupabase as unknown as Awaited<ReturnType<typeof supabaseServerClient>>)
   })
 
-  const createFormData = (data: Record<string, string | boolean>): FormData => {
+  const createFormData = (data: Record<string, string | boolean | null>): FormData => {
     const formData = new FormData()
     Object.entries(data).forEach(([key, value]) => {
       if (typeof value === 'boolean') {
         if (value) {
           formData.set(key, '')
         }
-      } else {
+      } else if (value !== null) {
         formData.set(key, value)
       }
     })
@@ -60,6 +65,7 @@ describe('認証アクション', () => {
         password: 'Password123!',
         login: true,
         signup: false,
+        from: null,
       })
 
       const mockAuthResponse = {
@@ -84,12 +90,144 @@ describe('認証アクション', () => {
         password: 'Password123!',
         login: true,
         signup: false,
+        from: null,
       })
       expect(mockSupabase.auth.signInWithPassword).toHaveBeenCalledWith({
         email: 'test@example.com',
         password: 'Password123!',
         login: true,
         signup: false,
+        from: null,
+      })
+    })
+  })
+
+  describe('fromパラメータとリダイレクトパス決定', () => {
+    it('fromが"shopping"の場合、/shoppingにリダイレクトする', async () => {
+      const formData = createFormData({
+        email: 'test@example.com',
+        password: 'Password123!',
+        login: true,
+        signup: false,
+        from: 'shopping',
+      })
+
+      const mockAuthResponse = {
+        data: {
+          user: { id: '123', email: 'test@example.com' },
+          session: { access_token: 'token123' },
+        },
+        error: null,
+      } as AuthTokenResponsePassword
+
+      mockSupabase.auth.signInWithPassword.mockImplementation(() => Promise.resolve(mockAuthResponse))
+
+      const result = await authAction(authInitialState, formData)
+
+      expect(result.success).toBe(true)
+      expect(result.redirectPath).toBe('/shopping')
+      expect(result.data).toEqual({
+        email: 'test@example.com',
+        password: 'Password123!',
+        login: true,
+        signup: false,
+        from: 'shopping',
+      })
+    })
+
+    it('fromが"authed"の場合、/authedにリダイレクトする', async () => {
+      const formData = createFormData({
+        email: 'test@example.com',
+        password: 'Password123!',
+        login: true,
+        signup: false,
+        from: 'authed',
+      })
+
+      const mockAuthResponse = {
+        data: {
+          user: { id: '123', email: 'test@example.com' },
+          session: { access_token: 'token123' },
+        },
+        error: null,
+      } as AuthTokenResponsePassword
+
+      mockSupabase.auth.signInWithPassword.mockImplementation(() => Promise.resolve(mockAuthResponse))
+
+      const result = await authAction(authInitialState, formData)
+
+      expect(result.success).toBe(true)
+      expect(result.redirectPath).toBe('/authed')
+      expect(result.data).toEqual({
+        email: 'test@example.com',
+        password: 'Password123!',
+        login: true,
+        signup: false,
+        from: 'authed',
+      })
+    })
+
+    it('fromがnullまたは未指定の場合、デフォルトで/authedにリダイレクトする', async () => {
+      const formData = createFormData({
+        email: 'test@example.com',
+        password: 'Password123!',
+        login: true,
+        signup: false,
+        from: null,
+      })
+
+      const mockAuthResponse = {
+        data: {
+          user: { id: '123', email: 'test@example.com' },
+          session: { access_token: 'token123' },
+        },
+        error: null,
+      } as AuthTokenResponsePassword
+
+      mockSupabase.auth.signInWithPassword.mockImplementation(() => Promise.resolve(mockAuthResponse))
+
+      const result = await authAction(authInitialState, formData)
+
+      expect(result.success).toBe(true)
+      expect(result.redirectPath).toBe('/authed')
+      expect(result.data).toEqual({
+        email: 'test@example.com',
+        password: 'Password123!',
+        login: true,
+        signup: false,
+        from: null,
+      })
+    })
+
+    it('サインアップ時にもfromパラメータに基づいてリダイレクトパスが決定される', async () => {
+      const formData = createFormData({
+        email: 'new@example.com',
+        password: 'NewPassword123!',
+        login: false,
+        signup: true,
+        from: 'shopping',
+      })
+
+      const mockAuthResponse = {
+        data: {
+          user: { id: '456', email: 'new@example.com' },
+          session: null,
+        },
+        error: null,
+      } as AuthResponse
+
+      mockSupabase.auth.signUp.mockImplementation(() => Promise.resolve(mockAuthResponse))
+
+      const result = await authAction(authInitialState, formData)
+
+      expect(result.success).toBe(true)
+      expect(result.redirectPath).toBe('/shopping')
+      expect(result.data).toEqual({
+        email: 'new@example.com',
+        password: 'NewPassword123!',
+        login: false,
+        signup: true,
+        from: 'shopping',
       })
     })
   })
@@ -101,6 +239,7 @@ describe('認証アクション', () => {
         password: 'NewPassword123!',
         login: false,
         signup: true,
+        from: null,
       })
 
       const mockAuthResponse = {
@@ -125,12 +264,14 @@ describe('認証アクション', () => {
         password: 'NewPassword123!',
         login: false,
         signup: true,
+        from: null,
       })
       expect(mockSupabase.auth.signUp).toHaveBeenCalledWith({
         email: 'new@example.com',
         password: 'NewPassword123!',
         login: false,
         signup: true,
+        from: null,
       })
     })
   })
@@ -280,6 +421,7 @@ describe('認証アクション', () => {
         password: 'Password123!',
         login: true,
         signup: false,
+        from: null,
       })
 
       const mockAuthError = {
@@ -307,6 +449,7 @@ describe('認証アクション', () => {
         password: 'Password123!',
         login: true,
         signup: false,
+        from: null,
       })
     })
 
@@ -343,6 +486,7 @@ describe('認証アクション', () => {
         password: 'Password123!',
         login: false,
         signup: true,
+        from: null,
       })
     })
   })
@@ -354,6 +498,7 @@ describe('認証アクション', () => {
         password: 'Password123!',
         login: true,
         signup: false,
+        from: null,
       })
 
       const networkError = new Error('Network connection failed')
@@ -382,6 +527,7 @@ describe('認証アクション', () => {
         password: 'Password123!',
         login: true,
         signup: false,
+        from: null,
       })
 
       mockSupabaseServerClient.mockRejectedValue(new Error('Failed to initialize Supabase client'))
@@ -411,6 +557,7 @@ describe('認証アクション', () => {
         password: 'Password123!',
         login: false,
         signup: false,
+        from: null,
       })
       expect(mockSupabase.auth.signInWithPassword).not.toHaveBeenCalled()
       expect(mockSupabase.auth.signUp).not.toHaveBeenCalled()
