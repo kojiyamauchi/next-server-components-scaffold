@@ -20,11 +20,15 @@ export const middleware = async (request: NextRequest): Promise<NextResponse> =>
   } = await supabase.auth.getUser()
 
   if (!user && request.nextUrl.pathname.startsWith('/authed')) {
-    return NextResponse.redirect(new URL('/login?from=authed', request.url))
+    const login = new URL('/login', request.url)
+    login.searchParams.set('from', 'authed')
+    return NextResponse.redirect(login)
   }
 
   if (!user && request.nextUrl.pathname.startsWith('/shopping')) {
-    return NextResponse.redirect(new URL('/login?from=shopping', request.url))
+    const login = new URL('/login', request.url)
+    login.searchParams.set('from', 'shopping')
+    return NextResponse.redirect(new URL(login))
   }
 
   return supabaseResponse
