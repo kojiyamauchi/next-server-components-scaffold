@@ -73,7 +73,7 @@ export const LoginContainer: React.FC<Props> = ({ from }) => {
           <SquareButton type="submit" name="login" label="LOGIN" />
           <SquareButton type="submit" name="signup" label="SIGNUP" />
         </div>
-        <input type="hidden" name="from" value={fromParam} />
+        {fromParam && <input type="hidden" name="from" value={fromParam} />}
       </form>
       {state.authError && <span className="text-[22px] text-[#b61414] font-bold px-[6px]">{state.message}</span>}
     </>
