@@ -3,8 +3,9 @@
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
 
+import { LogoutButton } from '@/components/LogoutButton'
+
 import { logoutAction } from '../actions/logout'
-import { LogoutButton } from '../components/LogoutButton'
 
 export const AuthedContainer: React.FC = () => {
   const router = useRouter()
