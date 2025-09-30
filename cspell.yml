@@ -47,3 +47,4 @@ ignorePaths:
   - .env
   - .env.repository.secrets
   - etc.md
+  - src/libs/$path.ts
