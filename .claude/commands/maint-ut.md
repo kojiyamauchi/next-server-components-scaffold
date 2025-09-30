@@ -1,5 +1,5 @@
 ---
-name: unit-test
+name: maint-unit-test
 description: test-automation-specialistエージェントを利用したjestによるユニットテストの実行
 ---
 
