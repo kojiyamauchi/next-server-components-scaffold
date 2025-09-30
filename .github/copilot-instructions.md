@@ -1,3 +1,3 @@
 ## 使用言語
 
-日本語でレビューしてください。
+- Pull Request Overview、Reviewed Changes、コメントは全て必ず日本語で書いてください
