@@ -27,6 +27,7 @@ words:
   - vimrc
   - quotepath
   - precomposeunicode
+  - maint
 flagWords:
   - null
 ignorePaths:
