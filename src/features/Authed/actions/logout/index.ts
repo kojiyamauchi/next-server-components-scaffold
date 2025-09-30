@@ -15,7 +15,7 @@ export const logoutAction = async (): Promise<LogoutActionResult> => {
     const { error } = await supabase.auth.signOut()
 
     if (!error) {
-      return { success: true, message: 'Logout Success', redirectPath: pagesPath.login.$url().path }
+      return { success: true, message: 'Logout Success', redirectPath: pagesPath.login.$url({ query: { from: 'authed' } }).path }
     } else {
       console.error('Happen Logout Error: ', error)
       return { success: false, message: 'Happen Logout Fail', redirectPath: null }

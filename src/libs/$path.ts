@@ -1,3 +1,5 @@
+import type { OptionalQuery as OptionalQuery_1gskw3j } from '../app/login/page';
+
 const buildSuffix = (url?: {
   query?: Record<string, string | number | boolean | Array<string | number | boolean>>,
   hash?: string
@@ -34,7 +36,7 @@ export const pagesPath = {
     $url: (url?: { hash?: string }) => ({ pathname: '/authed' as const, hash: url?.hash, path: `/authed${buildSuffix(url)}` })
   },
   'login': {
-    $url: (url?: { hash?: string }) => ({ pathname: '/login' as const, hash: url?.hash, path: `/login${buildSuffix(url)}` })
+    $url: (url?: { query?: OptionalQuery_1gskw3j, hash?: string }) => ({ pathname: '/login' as const, query: url?.query, hash: url?.hash, path: `/login${buildSuffix(url)}` })
   },
   'shopping': {
     $url: (url?: { hash?: string }) => ({ pathname: '/shopping' as const, hash: url?.hash, path: `/shopping${buildSuffix(url)}` })

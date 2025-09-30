@@ -1,7 +1,11 @@
 import { Login } from '@/features/Login/pages'
 
+export type OptionalQuery = {
+  from: 'authed' | 'shopping'
+}
+
 type Props = {
-  searchParams: Promise<{ from: string | string[] | undefined }>
+  searchParams: Promise<Partial<OptionalQuery>>
 }
 
 const Page: React.FC<Props> = async ({ searchParams }) => {

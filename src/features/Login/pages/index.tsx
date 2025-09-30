@@ -3,7 +3,7 @@ import { Heading } from '@/components/Heading'
 import { LoginContainer } from '../containers/LoginContainer'
 
 type Props = {
-  from: string | string[] | undefined
+  from?: 'authed' | 'shopping'
 }
 
 export const Login: React.FC<Props> = ({ from }) => {

@@ -12,7 +12,7 @@ import { authAction, authInitialState, type AuthStateType } from '../actions'
 import type { AuthSchemaType } from '../schemas'
 
 type Props = {
-  from: string | string[] | undefined
+  from?: 'authed' | 'shopping'
 }
 
 export const LoginContainer: React.FC<Props> = ({ from }) => {
