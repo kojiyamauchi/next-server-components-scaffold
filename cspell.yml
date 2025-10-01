@@ -33,6 +33,7 @@ flagWords:
 ignorePaths:
   - ./**/node_modules/**
   - ./.next
+  - ./.vercel
   - ./**/*/*.webp
   - ./**/*/*.svg
   - .git/**
