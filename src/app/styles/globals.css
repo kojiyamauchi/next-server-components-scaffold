@@ -34,3 +34,44 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', '游ゴシック Medium', meiryo, sans-serif;
   line-height: 1;
 }
+
+@theme {
+  --animate-dot-first: dot-first 1.175s ease-in infinite;
+  --animate-dot-second: dot-second 1.175s ease-in infinite;
+  --animate-dot-third: dot-third 1.175s ease-in infinite;
+  @keyframes dot-first {
+    0% {
+      opacity: 0;
+    }
+
+    25% {
+      opacity: 1;
+    }
+  }
+  @keyframes dot-second {
+    0% {
+      opacity: 0;
+    }
+
+    25% {
+      opacity: 0;
+    }
+
+    50% {
+      opacity: 1;
+    }
+  }
+  @keyframes dot-third {
+    0% {
+      opacity: 0;
+    }
+
+    50% {
+      opacity: 0;
+    }
+
+    75% {
+      opacity: 1;
+    }
+  }
+}
