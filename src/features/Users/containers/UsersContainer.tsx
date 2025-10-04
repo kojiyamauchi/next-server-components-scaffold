@@ -15,7 +15,7 @@ export const UsersContainer: React.FC = async () => {
   try {
     const users = await fetchUsersRepo()
 
-    if (!Boolean(users.length)) {
+    if (users.length === 0) {
       return <p className="text-[30px] font-light flex items-center justify-start md:justify-center w-full px-[60px] py-[12px]">Not found user.</p>
     }
 
