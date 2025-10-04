@@ -8,6 +8,8 @@ import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { Navigation } from '@/components/Navigation'
 
+import Provider from './provider'
+
 export const sourceSans = Source_Sans_3({
   variable: '--font-source-sans',
   subsets: ['latin'],
@@ -48,20 +50,22 @@ export default function RootLayout({
         <link rel="canonical" href="https://example.com" />
       </head>
       <body className={`${sourceSans.variable} ${notoSans.variable} ${lobster.variable} antialiased`}>
-        <div className="font-source-sans font-noto-sans flex flex-col w-full min-h-[100vh] min-h-fill-available pt-[50px] px-0 pb-[20px]">
-          <header className="w-full pb-[40px]">
-            <Header />
-          </header>
-          <nav className="pb-[10px]">
-            <Navigation />
-          </nav>
-          <main className="flex flex-1 flex-col items-center justify-center w-full bg-[url('/images/logo.webp')] bg-no-repeat bg-position-[80%_center] bg-size-[25%_auto]">
-            {children}
-          </main>
-          <footer className="flex items-center justify-center w-full">
-            <Footer />
-          </footer>
-        </div>
+        <Provider>
+          <div className="font-source-sans font-noto-sans flex flex-col w-full min-h-[100vh] min-h-fill-available pt-[50px] px-0 pb-[20px]">
+            <header className="w-full pb-[40px]">
+              <Header />
+            </header>
+            <nav className="pb-[10px]">
+              <Navigation />
+            </nav>
+            <main className="flex flex-1 flex-col items-center justify-center w-full bg-[url('/images/logo.webp')] bg-no-repeat bg-position-[80%_center] bg-size-[25%_auto]">
+              {children}
+            </main>
+            <footer className="flex items-center justify-center w-full">
+              <Footer />
+            </footer>
+          </div>
+        </Provider>
       </body>
     </html>
   )
