@@ -35,10 +35,15 @@ export const UserContainerClient: React.FC<Props> = ({ id, name, url, phone1, ph
 
   const handleDeleteUser = useCallback(async () => {
     setIsLoadingDeleteUser(true)
-    const result = await deleteUserAction(id)
+    const result = await deleteUserAction(id).catch((error) => {
+      console.error('delete user error -', error)
+      setIsLoadingDeleteUser(false)
+      return
+    })
 
-    if (result.isSuccess) {
+    if (result !== undefined && result.isSuccess) {
       router.push(result.path)
+      setIsLoadingDeleteUser(false)
     }
   }, [id, router])
 
