@@ -1,18 +1,18 @@
 import type { JSX } from 'react'
 
 type Props<T> = {
-  fetcher: Promise<T>
+  fetcher: () => Promise<T>
   children: (fetcherResult: T) => React.ReactNode
 }
 
 export const SuspenseWrapper = async <T,>({ fetcher, children }: Props<T>): Promise<JSX.Element> => {
-  const result = await fetcher
+  const result = await fetcher()
   return <>{children(result)}</>
 }
 
 /* Example:
   <Suspense fallback={<div>Loading users...</div>}>
-    <SuspenseWrapper<User[]> fetcher={fetchUsers()}>
+    <SuspenseWrapper<User[]> fetcher={fetchUsers}>
       {(user) =>
         user.map((user) => (
           <a key={user.id}>
