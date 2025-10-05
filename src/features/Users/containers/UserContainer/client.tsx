@@ -43,7 +43,6 @@ export const UserContainerClient: React.FC<Props> = ({ id, name, url, phone1, ph
 
     if (result !== undefined && result.isSuccess) {
       router.push(result.path)
-      setIsLoadingDeleteUser(false)
     }
   }, [id, router])
 
