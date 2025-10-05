@@ -5,8 +5,8 @@ import Link from 'next/link'
 
 import { pagesPath } from '@/libs'
 
-import { List } from '../components/List'
-import { fetchUsersRepo } from '../repositories'
+import { List } from '../../components/List'
+import { fetchUsersRepo } from '../../repositories'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)

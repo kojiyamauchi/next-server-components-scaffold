@@ -1,5 +1,6 @@
 import type { Preview } from '@storybook/nextjs-vite'
 import '../src/app/styles/globals.css'
+import 'react-loading-skeleton/dist/skeleton.css'
 import { sourceSans, notoSans, lobster } from '../src/app/layout'
 
 const preview: Preview = {

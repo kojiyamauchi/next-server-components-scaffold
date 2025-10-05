@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react'
 
 import { LogoutButton } from '@/components/LogoutButton'
 
-import { logoutAction } from '../actions/logout'
+import { logoutAction } from '../../actions/logout'
 
 export const ShoppingContainer: React.FC = () => {
   const router = useRouter()

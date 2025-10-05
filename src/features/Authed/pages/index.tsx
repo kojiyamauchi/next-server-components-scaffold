@@ -1,4 +1,4 @@
-import { AuthedContainer } from '../containers/authedContainer'
+import { AuthedContainer } from '../containers/AuthedContainer'
 
 export const Authed: React.FC = () => {
   return (

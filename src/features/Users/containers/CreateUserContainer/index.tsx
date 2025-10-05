@@ -9,13 +9,12 @@ import { InputText } from '@/components/InputText'
 import { LoadingForm } from '@/components/LoadingForm'
 import { SquareButton } from '@/components/SquareButton'
 
-import { createUserAction, type CreateUserStateType, userInitialState } from '../actions'
-import type { CreateUserSchemaType } from '../schemas'
+import { createUserAction, type CreateUserStateType, userInitialState } from '../../actions'
+import type { CreateUserSchemaType } from '../../schemas'
 
 export const CreateUserContainer: React.FC = () => {
   const router = useRouter()
 
-  const [user, setUser] = useState<CreateUserSchemaType | null>(null)
   const [isRouterBeforeLeave, setIsRouterBeforeLeave] = useState<boolean>(false)
   const [state, formAction, isPending] = useActionState<CreateUserStateType, FormData>(createUserAction, userInitialState)
 
@@ -24,9 +23,6 @@ export const CreateUserContainer: React.FC = () => {
       setIsRouterBeforeLeave(true)
       router.push(state.redirectPath)
       return
-    }
-    if (state.data !== null) {
-      setUser(state.data)
     }
   }, [state, router])
 
@@ -46,17 +42,17 @@ export const CreateUserContainer: React.FC = () => {
       <div className="flex flex-col items-center justify-start gap-[20px] w-full min-h-[296px]">
         {!isLoading && (
           <>
-            <InputText name="name" label="NAME" defaultValue={user?.name} errors={checkErrors('name')} />
-            <InputText name="url" label="WEB" defaultValue={user?.url} errors={checkErrors('url')} />
+            <InputText name="name" label="NAME" defaultValue={state.data?.name} errors={checkErrors('name')} />
+            <InputText name="url" label="WEB" defaultValue={state.data?.url} errors={checkErrors('url')} />
             <InputPhone
-              defaultValue1={user?.phone1}
-              defaultValue2={user?.phone2}
-              defaultValue3={user?.phone3}
+              defaultValue1={state.data?.phone1}
+              defaultValue2={state.data?.phone2}
+              defaultValue3={state.data?.phone3}
               errorsPhone1={checkErrors('phone1')}
               errorsPhone2={checkErrors('phone2')}
               errorsPhone3={checkErrors('phone3')}
             />
-            <InputEmail defaultValue={user?.email} errors={checkErrors('email')} />
+            <InputEmail defaultValue={state.data?.email} errors={checkErrors('email')} />
           </>
         )}
         {isLoading && (
@@ -64,7 +60,7 @@ export const CreateUserContainer: React.FC = () => {
             <LoadingForm label="NAME" />
             <LoadingForm label="WEB" />
             <LoadingForm label="PHONE" />
-            <LoadingForm label="EMAIL" />
+            <LoadingForm label="E-MAIL" />
           </>
         )}
       </div>

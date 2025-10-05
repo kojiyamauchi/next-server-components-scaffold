@@ -1,5 +1,4 @@
 export * from './createUser'
 export * from './deleteUser'
-export * from './getUser'
 export * from './states/'
 export * from './updateUser'
