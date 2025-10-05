@@ -8,8 +8,8 @@ import { InputPassword } from '@/components/InputPassword'
 import { LoadingForm } from '@/components/LoadingForm'
 import { SquareButton } from '@/components/SquareButton'
 
-import { authAction, authInitialState, type AuthStateType } from '../actions'
-import type { AuthSchemaType } from '../schemas'
+import { authAction, authInitialState, type AuthStateType } from '../../actions'
+import type { AuthSchemaType } from '../../schemas'
 
 type Props = {
   from?: 'authed' | 'shopping'
