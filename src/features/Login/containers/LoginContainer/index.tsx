@@ -64,7 +64,7 @@ export const LoginContainer: React.FC<Props> = ({ from }) => {
           )}
           {isLoading && (
             <>
-              <LoadingForm label="EMAIL" />
+              <LoadingForm label="E-MAIL" />
               <LoadingForm label="PASSWORD" />
             </>
           )}
