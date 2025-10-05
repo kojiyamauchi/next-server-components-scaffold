@@ -3,7 +3,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import Skeleton from 'react-loading-skeleton'
 
 type Props = {
-  label: string
+  label?: string
 }
 
 export const LoadingForm: React.FC<Props> = ({ label }) => {

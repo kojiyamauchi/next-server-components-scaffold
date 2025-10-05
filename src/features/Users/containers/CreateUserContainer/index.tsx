@@ -60,7 +60,7 @@ export const CreateUserContainer: React.FC = () => {
             <LoadingForm label="NAME" />
             <LoadingForm label="WEB" />
             <LoadingForm label="PHONE" />
-            <LoadingForm label="EMAIL" />
+            <LoadingForm label="E-MAIL" />
           </>
         )}
       </div>
