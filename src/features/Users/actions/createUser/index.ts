@@ -39,7 +39,7 @@ export const createUserAction = async (prevState: CreateUserStateType, formData:
   const validateSuccessState: CreateUserStateType = {
     success: validateResult.success,
     message: null,
-    data: validateResult.data,
+    data: null,
     errors: null,
   }
 
