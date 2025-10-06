@@ -16,7 +16,7 @@
     "dev:path": "pathpida -o ./src/libs -w",
     "dev:app": "next dev --turbopack",
     "dev": "run-p \"dev:*\"",
-    "storybook": "NEXT_PUBLIC_STORYBOOK=enable BROWSER='Google Chrome Canary' storybook dev -p 6006",
+    "storybook": "NEXT_PUBLIC_STORYBOOK=enable BROWSER='Google Chrome' storybook dev -p 6006",
     "build:path": "pathpida -o ./src/libs",
     "build:storybook": "storybook build",
     "build:app": "next build --turbopack",
@@ -43,7 +43,7 @@
     "prisma:seed": "prisma db seed",
     "prisma:validate": "prisma validate",
     "prisma:format": "prisma format",
-    "prisma:studio": "prisma studio -b 'Google Chrome Canary'"
+    "prisma:studio": "prisma studio -b 'Google Chrome'"
   },
   "dependencies": {
     "@types/jest": "30.0.0",
