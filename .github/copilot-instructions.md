@@ -20,6 +20,7 @@
 **重要:**
 Copilot、Copilot Chat、Copilot Workspace、Pull Request自動レビューなど、
 AIアシスタントはこの指示内容を厳守し、日本語でのみ出力してください。
+たいぽ
 
 ## コードレビューについて
 
