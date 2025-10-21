@@ -1,11 +1,15 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals'
 
+jest.mock('@/libs/prismaClient', () => ({
+  prisma: {},
+}))
+
 import { createUserRepo } from '../../repositories'
 import { CreateUserStateType } from '../states'
 import { createUserAction } from './index'
 
 jest.mock('../../repositories')
-jest.mock('@/libs', () => ({
+jest.mock('@/libs/$path', () => ({
   pagesPath: {
     users: {
       _id: (id: number): { $url: () => { path: string } } => ({

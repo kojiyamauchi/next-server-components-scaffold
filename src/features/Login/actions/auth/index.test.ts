@@ -13,7 +13,7 @@ type MockSupabaseClient = {
   }
 }
 
-jest.mock('@/libs', () => ({
+jest.mock('@/libs/$path', () => ({
   pagesPath: {
     authed: {
       $url: (): { path: string } => ({
@@ -26,6 +26,9 @@ jest.mock('@/libs', () => ({
       }),
     },
   },
+}))
+
+jest.mock('@/libs/supabaseClient', () => ({
   supabaseServerClient: jest.fn(),
 }))
 

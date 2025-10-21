@@ -2,7 +2,7 @@ import type { User } from '@prisma/client'
 
 const mockFindUnique = jest.fn()
 
-jest.mock('@/libs', () => ({
+jest.mock('@/libs/prismaClient', () => ({
   prisma: {
     user: {
       findUnique: mockFindUnique,

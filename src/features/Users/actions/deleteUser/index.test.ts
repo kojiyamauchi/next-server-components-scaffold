@@ -1,10 +1,14 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals'
 
+jest.mock('@/libs/prismaClient', () => ({
+  prisma: {},
+}))
+
 import { deleteUserRepo } from '../../repositories'
 import { deleteUserAction } from './index'
 
 jest.mock('../../repositories')
-jest.mock('@/libs', () => ({
+jest.mock('@/libs/$path', () => ({
   pagesPath: {
     users: {
       $url: (): { path: string } => ({
