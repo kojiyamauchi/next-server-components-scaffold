@@ -1,6 +1,7 @@
 'use server'
 
-import { pagesPath, supabaseServerClient } from '@/libs'
+import { pagesPath } from '@/libs/$path'
+import { supabaseServerClient } from '@/libs/supabaseClient'
 
 type LogoutActionResult = {
   success: boolean

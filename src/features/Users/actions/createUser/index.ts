@@ -2,7 +2,7 @@
 
 import dayjs from 'dayjs'
 
-import { pagesPath } from '@/libs'
+import { pagesPath } from '@/libs/$path'
 
 import { createUserRepo } from '../../repositories'
 import { createUserSchema, type CreateUserSchemaType } from '../../schemas'

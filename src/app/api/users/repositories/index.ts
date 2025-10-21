@@ -2,7 +2,7 @@ import 'server-only'
 
 import type { User } from '@prisma/client'
 
-import { prisma } from '@/libs'
+import { prisma } from '@/libs/prismaClient'
 
 export const fetchUserRepo = async (id: number): Promise<User | null> => {
   const result = await prisma.user.findUnique({

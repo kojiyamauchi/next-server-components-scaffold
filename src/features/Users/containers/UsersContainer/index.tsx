@@ -3,7 +3,7 @@ import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import Link from 'next/link'
 
-import { pagesPath } from '@/libs'
+import { pagesPath } from '@/libs/$path'
 
 import { List } from '../../components/List'
 import { fetchUsersRepo } from '../../repositories'

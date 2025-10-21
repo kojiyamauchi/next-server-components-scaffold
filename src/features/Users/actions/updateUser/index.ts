@@ -3,7 +3,7 @@
 import dayjs from 'dayjs'
 import { revalidatePath } from 'next/cache'
 
-import { pagesPath } from '@/libs'
+import { pagesPath } from '@/libs/$path'
 
 import { updateUserRepo } from '../../repositories'
 import { updateUserSchema, type UpdateUserSchemaType } from '../../schemas'

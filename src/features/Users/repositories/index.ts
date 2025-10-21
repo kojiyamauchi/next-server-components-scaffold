@@ -2,7 +2,7 @@ import 'server-only'
 
 import type { User } from '@prisma/client'
 
-import { prisma } from '@/libs'
+import { prisma } from '@/libs/prismaClient'
 
 export const fetchUsersRepo = async (): Promise<User[]> => {
   const result = await prisma.user.findMany({

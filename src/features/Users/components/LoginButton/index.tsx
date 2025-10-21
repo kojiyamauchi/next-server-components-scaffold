@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { pagesPath } from '@/libs'
+import { pagesPath } from '@/libs/$path'
 
 export const LoginButton: React.FC = () => {
   return (

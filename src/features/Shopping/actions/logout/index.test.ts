@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals'
 
-import { supabaseServerClient } from '@/libs'
+import { supabaseServerClient } from '@/libs/supabaseClient'
 
 import { logoutAction } from './index'
 
