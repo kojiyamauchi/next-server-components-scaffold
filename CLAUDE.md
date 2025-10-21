@@ -147,6 +147,7 @@ yarn prisma:studio
 - **ルーティング**：pathpidaによる型安全なルーティング（`src/libs/path/`に自動生成）
 - **UI開発**：Storybook 9.x（アクセシビリティ、ドキュメンテーション、テスト統合）
 - **状態管理**：Server Actions + React Server Components（featuresディレクトリ内のactionsで管理）
+- **API通信**：tRPC（型安全なAPI通信）+ TanStack Query（データフェッチング・キャッシング）
 - **環境変数管理**：@t3-oss/env-nextjsによる型安全な環境変数
 - **日付処理**：dayjs（軽量ライブラリ採用）
 - **UI Kit**：@headlessui/react（アクセシビリティ対応）
@@ -161,13 +162,21 @@ yarn prisma:studio
   - `actions/`: Server Actions（CRUD操作、状態管理）
   - `components/`: 機能固有のコンポーネント
   - `containers/`: Server Componentsによるデータ取得とUI結合
+  - `hooks/`: カスタムReact Hooks
   - `pages/`: Next.js App Routerで使用するページコンポーネント
-  - `repositories/`: データベースアクセス層
+  - `repositories/`: データベースアクセス層（Prisma操作）
   - `schemas/`: Zodによる型定義とバリデーション
+  - `services/`: ビジネスロジック層
+  - `stores/`: クライアントサイド状態管理
+  - `tests/`: 統合テスト・E2Eテスト
+- **tRPC**: 型安全なAPI通信を`src/trpc/`に配置
+  - `controllers/`: tRPCルーターの定義
+  - `repositories/`: tRPC用データアクセス層
+  - `services/`: tRPC用ビジネスロジック
 - **Libraries**: ユーティリティとライブラリを`src/libs/`に配置（Prismaクライアント等）
 - **Utils**: 汎用ヘルパー関数を`src/utils/`に配置
 - **Stories**: Storybookストーリーを各コンポーネントディレクトリに`.stories.tsx`として配置
-- **Tests**: テストファイルを各機能ディレクトリ内に`.test.ts`として配置
+- **Tests**: ユニットテストファイルを各機能ディレクトリ内に`.test.ts`として配置
 - **Path Aliases**: srcディレクトリからのインポートには`@/`を使用、ルートからは`~/*`を使用
 - **Type-safe Routing**: pathpidaによる型安全なルーティングパスは`src/libs/$path.ts`に自動生成
 
@@ -176,6 +185,8 @@ yarn prisma:studio
 - **pathpida**: 型安全なルーティング（開発時に自動監視、ビルド時に生成）
 - **Prisma**: PostgreSQLデータベースのORM、マイグレーション、型安全なクエリ
 - **Supabase**: PostgreSQLデータベースホスティング、ローカル開発環境
+- **tRPC**: エンドツーエンド型安全なAPI通信フレームワーク
+- **TanStack Query**: データフェッチング、キャッシング、同期管理
 - **Zod**: ランタイム型バリデーション、Prismaスキーマとの連携
 - **Storybook**: コンポーネント開発とドキュメンテーション
 - **Husky + lint-staged**: プリコミットフックによるコード品質維持
@@ -420,6 +431,37 @@ yarn build-test                                 # ビルドテスト実行
 ```
 
 このCI/CDパイプラインにより、コード品質の維持、自動デプロイ、プレビュー環境での確認を効率的に実現しています。
+
+## tRPC統合
+
+### 概要
+
+このプロジェクトではtRPCとTanStack Queryを組み合わせた型安全なAPI通信を実装しています。
+
+### ディレクトリ構造
+
+```
+src/trpc/
+├── app.ts              # tRPCルーター初期化
+├── index.ts            # appRouterのエクスポート
+└── [feature]/
+    ├── controllers/    # tRPCルーター定義
+    ├── repositories/   # データアクセス層
+    └── services/       # ビジネスロジック層
+```
+
+### 主な特徴
+
+- **型安全性**: クライアント・サーバー間で型情報を共有
+- **自動補完**: IDEでの完全な型推論サポート
+- **エラーハンドリング**: 統一されたエラーハンドリング機構
+- **キャッシング**: TanStack Queryによる効率的なデータキャッシング
+
+### featuresディレクトリとの使い分け
+
+- **Server Components**: `features/*/containers/`でPrismaから直接データ取得
+- **Client Components**: tRPC経由でAPI呼び出し
+- **tRPC**: リアルタイム性・キャッシング・楽観的更新が必要な場合に使用
 
 ## Claude Code Agent設定
 
