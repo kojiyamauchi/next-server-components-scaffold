@@ -8,7 +8,8 @@
     "yarn": "4.6.0"
   },
   "prisma": {
-    "seed": "yarn tsx prisma/seeds/index.ts"
+    "schema": "src/prisma/schema.prisma",
+    "seed": "yarn tsx src/prisma/seeds/index.ts"
   },
   "scripts": {
     "prepare": "husky install",
