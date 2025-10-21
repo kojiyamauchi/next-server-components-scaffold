@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals'
 import type { AuthResponse, AuthTokenResponsePassword } from '@supabase/supabase-js'
 
-import { supabaseServerClient } from '@/libs'
+import { supabaseServerClient } from '@/libs/supabaseClient'
 
 import { authInitialState } from '../state'
 import { authAction } from './index'
@@ -13,7 +13,7 @@ type MockSupabaseClient = {
   }
 }
 
-jest.mock('@/libs', () => ({
+jest.mock('@/libs/$path', () => ({
   pagesPath: {
     authed: {
       $url: (): { path: string } => ({
@@ -26,6 +26,9 @@ jest.mock('@/libs', () => ({
       }),
     },
   },
+}))
+
+jest.mock('@/libs/supabaseClient', () => ({
   supabaseServerClient: jest.fn(),
 }))
 

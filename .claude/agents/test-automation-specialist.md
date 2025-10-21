@@ -43,6 +43,7 @@ model: sonnet
      テスト修正: [修正内容の日本語説明]
 
      🤖 Generated with [Claude Code](https://claude.ai/code)
+     🔧 Agent: test-automation-specialist
 
      Co-Authored-By: Claude <noreply@anthropic.com>
      ```

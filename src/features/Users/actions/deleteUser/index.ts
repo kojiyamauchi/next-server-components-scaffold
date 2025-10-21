@@ -1,6 +1,6 @@
 'use server'
 
-import { pagesPath } from '@/libs'
+import { pagesPath } from '@/libs/$path'
 
 import { deleteUserRepo } from '../../repositories'
 

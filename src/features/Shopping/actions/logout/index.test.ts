@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals'
 
-import { supabaseServerClient } from '@/libs'
+import { supabaseServerClient } from '@/libs/supabaseClient'
 
 import { logoutAction } from './index'
 
@@ -10,7 +10,7 @@ type MockSupabaseClient = {
   }
 }
 
-jest.mock('@/libs', () => ({
+jest.mock('@/libs/$path', () => ({
   pagesPath: {
     login: {
       $url: (): { path: string } => ({
@@ -18,6 +18,9 @@ jest.mock('@/libs', () => ({
       }),
     },
   },
+}))
+
+jest.mock('@/libs/supabaseClient', () => ({
   supabaseServerClient: jest.fn(),
 }))
 

@@ -3141,6 +3141,39 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@trpc/client@npm:11.6.0":
+  version: 11.6.0
+  resolution: "@trpc/client@npm:11.6.0"
+  peerDependencies:
+    "@trpc/server": 11.6.0
+    typescript: ">=5.7.2"
+  checksum: 10c0/663ba6ea3bc273ffb56c1dcf1a4d02b232b617c0c80a3ea296b23bae21624faf5ac71f22bab4f823c0c06bcf61a5fdc79d9a4892db35322294b51b28750b6043
+  languageName: node
+  linkType: hard
+
+"@trpc/react-query@npm:11.6.0":
+  version: 11.6.0
+  resolution: "@trpc/react-query@npm:11.6.0"
+  peerDependencies:
+    "@tanstack/react-query": ^5.80.3
+    "@trpc/client": 11.6.0
+    "@trpc/server": 11.6.0
+    react: ">=18.2.0"
+    react-dom: ">=18.2.0"
+    typescript: ">=5.7.2"
+  checksum: 10c0/453ea1b8de3220697f22cbedc97a46b917c15ba2b7aa6a9898c3d3eb566664d1bf3349c84d8ba786ec640be663983ece3aea0ae56cc5ba947f84ba77bbdcf47b
+  languageName: node
+  linkType: hard
+
+"@trpc/server@npm:11.6.0":
+  version: 11.6.0
+  resolution: "@trpc/server@npm:11.6.0"
+  peerDependencies:
+    typescript: ">=5.7.2"
+  checksum: 10c0/a9f957e276e5e78cf0495d4b9db73d6edd4dab7d269ac281c8074cde31162beace6c47be7b0871ba85a56ea2a92933d42c460cc59ea657f56db5064ee20399b5
+  languageName: node
+  linkType: hard
+
 "@tybys/wasm-util@npm:^0.10.0":
   version: 0.10.0
   resolution: "@tybys/wasm-util@npm:0.10.0"
@@ -8297,6 +8330,9 @@ __metadata:
     "@t3-oss/env-nextjs": "npm:0.13.8"
     "@tailwindcss/postcss": "npm:^4"
     "@tanstack/react-query": "npm:5.90.2"
+    "@trpc/client": "npm:11.6.0"
+    "@trpc/react-query": "npm:11.6.0"
+    "@trpc/server": "npm:11.6.0"
     "@types/eslint": "npm:9.6.1"
     "@types/identity-obj-proxy": "npm:^3"
     "@types/jest": "npm:30.0.0"

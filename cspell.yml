@@ -45,7 +45,7 @@ ignorePaths:
   - tsconfig.tsbuildinfo
   - ./storybook-static
   - ./supabase
-  - ./prisma
+  - src/prisma
   - .env
   - .env.repository.secrets
   - etc.md

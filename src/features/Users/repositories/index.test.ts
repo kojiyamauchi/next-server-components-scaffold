@@ -6,7 +6,7 @@ const mockCreate = jest.fn()
 const mockUpdate = jest.fn()
 const mockDelete = jest.fn()
 
-jest.mock('@/libs', () => ({
+jest.mock('@/libs/prismaClient', () => ({
   prisma: {
     user: {
       findMany: mockFindMany,

@@ -100,6 +100,7 @@ test: add unit tests for [対象機能名]
 - カバー範囲: [正常系/異常系/エッジケース等]
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
+🔧 Agent: general-purpose
 
 Co-Authored-By: Claude <noreply@anthropic.com>
 ```
@@ -127,6 +128,7 @@ test: add unit tests for exampleAction
 - カバー範囲: 正常系、バリデーションエラー、DBエラー、エッジケース
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
+🔧 Agent: general-purpose
 
 Co-Authored-By: Claude <noreply@anthropic.com>
 EOF

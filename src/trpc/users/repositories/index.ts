@@ -10,7 +10,7 @@ export const fetchUserRepo = async (id: number): Promise<User | null> => {
       order: true,
     },
     where: {
-      id: id,
+      id,
     },
   })
   return result
