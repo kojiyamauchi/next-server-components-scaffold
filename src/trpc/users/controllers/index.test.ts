@@ -11,6 +11,8 @@ jest.mock('../repositories', () => ({
 
 const mockFetchUserRepo = fetchUserRepo as jest.MockedFunction<typeof fetchUserRepo>
 
+const mockContext = { exampleContext: true }
+
 describe('tRPC users controller', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -31,7 +33,7 @@ describe('tRPC users controller', () => {
       it('ユーザーが正常に取得され、フォーマットされたデータが返される', async () => {
         mockFetchUserRepo.mockResolvedValue(mockUser)
 
-        const caller = users.createCaller({})
+        const caller = users.createCaller(mockContext)
         const result = await caller.getUser(1)
 
         expect(mockFetchUserRepo).toHaveBeenCalledWith(1)
@@ -55,7 +57,7 @@ describe('tRPC users controller', () => {
         }
         mockFetchUserRepo.mockResolvedValue(userWithDifferentPhone)
 
-        const caller = users.createCaller({})
+        const caller = users.createCaller(mockContext)
         const result = await caller.getUser(1)
 
         expect(result.phone1).toBe('03')
@@ -68,7 +70,7 @@ describe('tRPC users controller', () => {
       it('ユーザーが見つからない場合、NOT_FOUNDエラーをスローする', async () => {
         mockFetchUserRepo.mockResolvedValue(null)
 
-        const caller = users.createCaller({})
+        const caller = users.createCaller(mockContext)
 
         await expect(caller.getUser(999)).rejects.toThrow(
           new TRPCError({
@@ -83,7 +85,7 @@ describe('tRPC users controller', () => {
         const databaseError = new Error('データベース接続エラー')
         mockFetchUserRepo.mockRejectedValue(databaseError)
 
-        const caller = users.createCaller({})
+        const caller = users.createCaller(mockContext)
 
         await expect(caller.getUser(1)).rejects.toThrow(
           new TRPCError({
@@ -96,7 +98,7 @@ describe('tRPC users controller', () => {
       it('不明なエラーが発生した場合、INTERNAL_SERVER_ERRORをスローする', async () => {
         mockFetchUserRepo.mockRejectedValue('不明なエラー')
 
-        const caller = users.createCaller({})
+        const caller = users.createCaller(mockContext)
 
         await expect(caller.getUser(1)).rejects.toThrow(
           new TRPCError({
@@ -113,7 +115,7 @@ describe('tRPC users controller', () => {
         })
         mockFetchUserRepo.mockRejectedValue(trpcError)
 
-        const caller = users.createCaller({})
+        const caller = users.createCaller(mockContext)
 
         await expect(caller.getUser(1)).rejects.toThrow(trpcError)
       })
@@ -121,7 +123,7 @@ describe('tRPC users controller', () => {
 
     describe('入力バリデーション', () => {
       it('数値以外の入力を拒否する', async () => {
-        const caller = users.createCaller({})
+        const caller = users.createCaller(mockContext)
 
         await expect(caller.getUser('abc' as unknown as number)).rejects.toThrow()
       })
@@ -129,7 +131,7 @@ describe('tRPC users controller', () => {
       it('負の数値でもリポジトリを呼び出す', async () => {
         mockFetchUserRepo.mockResolvedValue(null)
 
-        const caller = users.createCaller({})
+        const caller = users.createCaller(mockContext)
 
         await expect(caller.getUser(-1)).rejects.toThrow(
           new TRPCError({
@@ -143,7 +145,7 @@ describe('tRPC users controller', () => {
       it('0でもリポジトリを呼び出す', async () => {
         mockFetchUserRepo.mockResolvedValue(null)
 
-        const caller = users.createCaller({})
+        const caller = users.createCaller(mockContext)
 
         await expect(caller.getUser(0)).rejects.toThrow(
           new TRPCError({
@@ -163,7 +165,7 @@ describe('tRPC users controller', () => {
         }
         mockFetchUserRepo.mockResolvedValue(userWithEmptyPhone)
 
-        const caller = users.createCaller({})
+        const caller = users.createCaller(mockContext)
         const result = await caller.getUser(1)
 
         expect(result.phone1).toBe('')
@@ -178,7 +180,7 @@ describe('tRPC users controller', () => {
         }
         mockFetchUserRepo.mockResolvedValue(userWithManyHyphens)
 
-        const caller = users.createCaller({})
+        const caller = users.createCaller(mockContext)
         const result = await caller.getUser(1)
 
         expect(result.phone1).toBe('090')
@@ -193,7 +195,7 @@ describe('tRPC users controller', () => {
         }
         mockFetchUserRepo.mockResolvedValue(userWithFewHyphens)
 
-        const caller = users.createCaller({})
+        const caller = users.createCaller(mockContext)
         const result = await caller.getUser(1)
 
         expect(result.phone1).toBe('090')

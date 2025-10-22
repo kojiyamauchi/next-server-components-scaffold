@@ -6,7 +6,9 @@ import { publicProcedure, router } from '@/trpc/app'
 import { fetchUserRepo } from '../repositories'
 
 export const users = router({
-  getUser: publicProcedure.input(z.number()).query(async ({ input }) => {
+  getUser: publicProcedure.input(z.number()).query(async ({ ctx, input }) => {
+    console.info(ctx)
+
     try {
       const user = await fetchUserRepo(input)
 
