@@ -7,6 +7,9 @@ const handler = (req: Request): Promise<Response> =>
     endpoint: '/api/trpc',
     req,
     router: appRouter,
+    createContext: () => {
+      return { exampleContext: true }
+    },
   })
 
 export { handler as GET, handler as POST }
