@@ -1,4 +1,4 @@
-./**/*.{ts,mjs}:
+./**/*.{tsx,ts,mjs}:
   - yarn prettier --write
   - yarn eslint --fix --no-warn-ignored --max-warnings 0
 ./**/*.js: yarn prettier --write
